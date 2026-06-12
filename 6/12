@@ -1,0 +1,74 @@
+package com.kh.ex3;
+
+import java.util.Scanner;
+
+public class Quiz3 {
+
+	public static void main(String[] args) {
+		/*입력 예시
+		 * 상품명을 입력하세요: 아메리카노
+          수량을 입력하세요: 3
+          단가를 입력하세요: 4100.5 */
+		/*1출력 "상품명을 입력하세요: "아메리카노
+		 *2 상품명입력받기
+		 *3출력 "수량을입력하세요: " 출력
+		 *4 수량 입력받기
+		 *5출력 "단가를 입력하세요: " 
+		 *6단가 입력받기
+		  7출력예시
+--- 장바구니 영수증 ---
+상품명    : 아메리카노
+수량      : 3 잔
+단가      : 4100.50 원
+----------------------
+총 금액   : 12301.50 원 
+		   */
+		
+		Scanner sc = new Scanner(System.in);
+		
+		Scanner sc2 = new Scanner(System.in);
+		
+		Scanner sc3 = new Scanner(System.in);
+
+		System.out.print("상품명을 입력하세요: ");
+		
+		String name = sc.nextLine(); // 문자열 String() / next() /nextline()
+		
+		System.out.print("수량을 입력하세요: "); //정수(int) nextInt()
+		
+		int qty = sc2.nextInt();
+		
+	    System.out.print("단가를 입력하세요: "); // 소수점이라 정수가 아니라 실수임 실수형태는(double) /nextDouble
+	    
+	    double price = sc3.nextDouble();
+	    
+	    System.out.println("--- 장바구니 영수증 ---");
+	    
+	    System.out.println("상품명    : "+name);
+	    
+	    System.out.printf("%-7s: %d 잔\n","수량",qty);// \n 은 줄바꿈 -7s는  왼쪽으로 7칸공백채움 
+	    
+	    System.out.printf("%-7s: %.2f 원\n","단가",price);//실수인경우 printf %.2 <-.2는 소수점자리 2번째자리까지표현
+	    
+	    System.out.println("----------------------");
+	    
+	    System.out.printf("총 금액   : %.2f 원",qty*price);
+	    /*		  7출력예시
+--- 장바구니 영수증 ---
+상품명    : 아메리카노
+수량      : 3 잔
+단가      : 4100.50 원
+----------------------
+총 금액   : 12301.50 원 
+		   */
+	    
+	}
+상품명을 입력하세요: 아메리카노
+수량을 입력하세요: 3
+단가를 입력하세요: 4100.50
+--- 장바구니 영수증 ---
+상품명    : 아메리카노
+수량     : 3 잔
+단가     : 4100.50 원
+----------------------
+총 금액   : 12301.50 원
