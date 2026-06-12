@@ -341,3 +341,41 @@ public class A_Variable {
 	}
 
 }
+package com.kh.ex2;
+
+public class Quiz2 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		/*정수형 변수 `a` 에 10, `b` 에 20을 할당하세요.
+
+그 후, 두 변수의 값을 서로 바꾸는 코드를 작성하세요. (단, 변수에 직접 숫자 10과 20을 재할당하는 방식이 아닙니다.)
+
+- 패키지명 : com.kh.ex2
+- 클래스명 : Quiz2
+
+**출력 예시**
+
+```bash
+교환 전: a = 10, b = 20
+교환 후: a = 20, b = 10
+```
+*/
+
+		int a = 10;
+		int b = 20;
+		System.out.printf("교환 전: a =%d,b = %d\n",a,b);
+		
+		//a의 값과 b의 값을 교환
+        int x = a;
+        
+        a = b;
+        
+        b = x;
+        System.out.printf("교환 후: a = %d, b = %d\n",a,b);
+        
+		
+
+	}
+
+}
