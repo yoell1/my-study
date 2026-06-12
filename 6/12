@@ -145,3 +145,199 @@ public class Quiz3 {
 	System.out.printf("자바 공부 %d일차\n", 2);
 
 ```
+package com.kh;
+
+public class A_Variable {
+
+	public static void main(String[] args) {
+		
+      //method1();
+		method2();
+	}
+	
+	public static void method2() {
+		
+		System.out.println("method2() start ....");
+		
+		//1. 논리형(boolean : true or false 를 저장하는 자료형
+		boolean isTrue = true; 
+		boolean isFalse = false;
+		
+		System.out.println("isTrue의 값 :" + isTrue);
+		
+		isFalse = -10> 2+3; //-10 > 5
+		System.out.println("-10 > 2 + 3 의 결과 :"+ isFalse);
+		
+		// -------------------
+		// 2. 숫자 (정수형 , 실수형)
+		// 2-1) 정수형 : 딱 떨어지는 수 소숫점을 포함하지 않음!
+		// byte(1B) / short(2B) / int(4B) / long(8B)
+		
+		//byte 자료형 변수 bNum을 선언하고 저장 할 수 있는 범위 내의 최소값 대입(저장)
+		byte bNum = -128; // -128 ~ 127
+		
+		// 1000 값을 bNum에 저장 할 수 있을까?
+		// bNum = 1000; // -> byte 범위를 벗어나기 때문에 오류 발생
+		long Num = 1000; // 1000->(int)-->(long)
+		long Num2 = 1000l;// -1000l -> (long)타입으로 바뀜
+		//2-2) 실수형 : 소숫점이 포함 된 숫자
+		// float(4B) / double(8B , 8byte)
+		// float 자료형 변수 fNum에 0.0을 저장
+		float fNum =  0.0f; // 기본 double이라 float으로 바꾸려면 뒤에 f 붙여야함
+		                    // 0.0f -> (double) 이 아님  float임 기본형은 double 고정
+		// double 자료형 변수 dNum에 0.0을 저장
+		double dNum;
+		
+		dNum = 0.0;
+		//--------------
+		//3.문자형 (기본자료 char  , 참조자료 String
+		//3-1 문자 : char (2B)
+		
+		//'a' 라는 값을 저장하는 변수 ch 선언
+		char ch = 'a';  // ch를 a로 명명함
+		
+		//'김' 이라는 값을 변수에 저장
+		char kim = '김';
+		
+		//3-2 문자열 : String(참조자료형)
+
+		//문자열 변수 str 선언-> 자료형 변수명;
+		
+		String str;
+		
+		//str 변수에 "안녕하세요 ~" 저장(대입,할당)
+		
+		str = "안녕하세요 ~";
+		
+		// str 데이터의 길이 : 변수명.length()
+		System.out.println("str 데이터 길이 :" + str.length());
+		
+		//상수 : 고정된 값, 변허지 않는 값을 저장하는 공간(변수)
+		//final 자료형 변수명;
+		
+		// 최대 이용자 수 를 저장하기 위한 상수 선언 : max users
+		
+		final int MAX_USERS;
+		MAX_USERS = 24;
+		// ....
+		//MAX_USERS = 26; 위에 24로 저장해놔서 안됨 새로 바꿔야함 / 재할당 불가
+		
+		
+		
+	
+		
+		
+	
+package com.kh;
+
+public class A_Variable {
+
+	public static void main(String[] args) {
+		
+      //method1();
+		method2();
+	}
+	
+	public static void method2() {
+		
+		System.out.println("method2() start ....");
+		
+		//1. 논리형(boolean : true or false 를 저장하는 자료형
+		boolean isTrue = true; 
+		boolean isFalse = false;
+		
+		System.out.println("isTrue의 값 :" + isTrue);
+		
+		isFalse = -10> 2+3; //-10 > 5
+		System.out.println("-10 > 2 + 3 의 결과 :"+ isFalse);
+		
+		// -------------------
+		// 2. 숫자 (정수형 , 실수형)
+		// 2-1) 정수형 : 딱 떨어지는 수 소숫점을 포함하지 않음!
+		// byte(1B) / short(2B) / int(4B) / long(8B)
+		
+		//byte 자료형 변수 bNum을 선언하고 저장 할 수 있는 범위 내의 최소값 대입(저장)
+		byte bNum = -128; // -128 ~ 127
+		
+		// 1000 값을 bNum에 저장 할 수 있을까?
+		// bNum = 1000; // -> byte 범위를 벗어나기 때문에 오류 발생
+		long Num = 1000; // 1000->(int)-->(long)
+		long Num2 = 1000l;// -1000l -> (long)타입으로 바뀜
+		//2-2) 실수형 : 소숫점이 포함 된 숫자
+		// float(4B) / double(8B , 8byte)
+		// float 자료형 변수 fNum에 0.0을 저장
+		float fNum =  0.0f; // 기본 double이라 float으로 바꾸려면 뒤에 f 붙여야함
+		                    // 0.0f -> (double) 이 아님  float임 기본형은 double 고정
+		// double 자료형 변수 dNum에 0.0을 저장
+		double dNum;
+		
+		dNum = 0.0;
+		//--------------
+		//3.문자형 (기본자료 char  , 참조자료 String
+		//3-1 문자 : char (2B)
+		
+		//'a' 라는 값을 저장하는 변수 ch 선언
+		char ch = 'a';  // ch를 a로 명명함
+		
+		//'김' 이라는 값을 변수에 저장
+		char kim = '김';
+		
+		//3-2 문자열 : String(참조자료형)
+
+		//문자열 변수 str 선언-> 자료형 변수명;
+		
+		String str;
+		
+		//str 변수에 "안녕하세요 ~" 저장(대입,할당)
+		
+		str = "안녕하세요 ~";
+		
+		// str 데이터의 길이 : 변수명.length()
+		System.out.println("str 데이터 길이 :" + str.length());
+		
+		//상수 : 고정된 값, 변허지 않는 값을 저장하는 공간(변수)
+		//final 자료형 변수명;
+		
+		// 최대 이용자 수 를 저장하기 위한 상수 선언 : max users
+		
+		final int MAX_USERS;
+		MAX_USERS = 24;
+		// ....
+		//MAX_USERS = 26; 위에 24로 저장해놔서 안됨 새로 바꿔야함 / 재할당 불가
+		
+		
+		
+	
+		
+		
+	
+	}
+	
+	public static void method1() {
+		// 월급 = 시급 x 근무시간 x 근무일수
+		// 출력형식 : xxx " 0,000원
+		// 2026년 최저시급 : 10,320
+		System.out.println("홍길동 :" + 10320*8*5 + "원");
+		System.out.println("아이유 :" + 10320*6*5 + "원");
+		System.out.println("나루토 :" + 10320*10*3 + "원");
+		System.out.println("짱구 :" + 10320*4*7 + "원");
+		System.out.println("루피 :" + 10320*6*10 + "원");
+		//변수를 사용하여 시급에 대한 값을 관리해보자.
+		//변수 선언 => 자료형 변수명;
+		int minWage = 10320;
+		//시급+500원
+		minWage = minWage + 500;
+		
+
+		System.out.println("홍길동 :" + 10320*8*5 + "원");
+		System.out.println("아이유 :" + 10320*6*5 + "원");
+		System.out.println("나루토 :" + 10320*10*3 + "원");
+		System.out.println("짱구 :" + 10320*4*7 + "원");
+		System.out.println("루피 :" + 10320*6*10 + "원");	
+		
+	}
+
+}
+	}
+
+}
