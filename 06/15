@@ -33,38 +33,40 @@ public class BookInfo {
     }
 
 [변수]
- * 메모리 내에 데이터(자료/값)를 저장하는 공간.
+ * "메모리(공간)" 내에 "데이터(자료/값)"를 저장하는 공간.
  * 목적 : (1) 변수명을 의미있게 지어줌으로써 "가독성"이 좋아짐
-          (2) 한번 선언해놓으면 여러번 사용할 수 있어, "유지 보수성"이 좋아짐
+          (2) 한번 선언해놓으면 여러 번 사용할 수 있어, "유지 보수성"이 좋아짐
  * 선언
     - 표현법
-			자료형 변수명;
+		자료형 변수명;
       ex) // 정수형 데이터를 보관하기 위한 num 이라는 이름으로 변수를 선언
            => int num;
           // 문자형 데이터를 보관하기 위한 gender 라는 이름으로 변수를 선언
-           => char gender; // 'M','F' /'m','f' /'남','여'
-           =>String gender// "남자","여자" / "M","F"    - 자료형 종류
+           => char gender;  // 'M', 'F' / 'm', 'f' / '남', '여'
+	   => String gender; // "남자", "여자" / "M", "F" 
+
+    - 자료형 종류
       * 문자 : 문자형 ('a', '0', ), 문자열 ("a", "asd", ..)
             - 문자형 : char
             - 문자열 : String
-      * 숫자 : 정수형 (1, 2, 3, -1, 0, 100), 실수형 (3.14, 0.55, ...)
-            - 정수형 : 4가지 byte(1B) / short(2B) / int (4B) / long (8B)
-            - 실수형 : float(4B) / double(8B)
-
-      * 논리형 (true/false) :boolean
-        ex) boolean isTrue = true; 
+      * 숫자 : 정수형 (1, 2, 3, -1, 0, 100), 실수형 (3.14, 0.55, 10.0, ...)
+            - 정수형 : 4가지. byte (1B), short (2B), int (4B), long (8B)
+            - 실수형 : 2가지. float (4B), double (8B)
+      * 논리형 (true/false) : boolean
+	ex) boolean isTrue = true;
 // -----------------------------------------------------------
 // 잘못된 부분을 찾아 해결해주세요 (4가지)
-1public class BookInfo {
- "2"  public void static main(String[] args) {
+1 public class BookInfo {
+"2"    public static void main(String[] args) {		// main 메소드 => 자바의 시작점!
 3        String title = "Java의 정석"; 
 4        String author = "남궁성"; 
- "5"        int pageCount = 1022; //숫자는 따옴표 없이표시  
- "6"        boolean isAvailable = false;  // 0; // 자료형 불일치! 
+"5"        int pageCount = 1022;  // "1022";   // 자료형이 불일치!
+"6"        boolean isAvailable = false; // 0; // 자료형이 불일치! 
 7
 8        System.out.println("책 제목: " + title);
-9        System.out.println("저자: " + author);
- "10"        System.out.println("페이지 수: " + pageCount);
+9        System.out.println("저자: " + author); 
+"10"        // System.out.println("페이지 수: " + count);	// 선언된 변수가 없음!
+           System.out.println("페이지 수: " + pageCount);
 11        System.out.println("대출 가능 여부: " + isAvailable);
-12     }
-13  }
+12    }
+13 }
