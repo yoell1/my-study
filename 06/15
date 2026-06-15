@@ -70,3 +70,209 @@ public class BookInfo {
 11        System.out.println("대출 가능 여부: " + isAvailable);
 12    }
 13 }
+
+## 연산자란?
+
+연산자(Operator)는 **데이터를 처리하여 결과를 도출하는 데 사용되는 기호**를 의미합니다. 
+
+연산의 대상이 되는 데이터를 피연산자(Operand)라고 부릅니다.
+
+## 연산자 종류와 우선순위
+
+자바에는 수많은 연산자가 존재하며, 한 줄에 여러 연산자가 섞여 있을 때 무엇을 먼저 계산할지 결정하는 **우선순위**가 정해져 있습니다.
+
+
+
+### 1) 산술 연산자 (Arithmetic Operators)
+
+일반 수학의 사칙 연산과 동일한 방식으로 작동하며, 우선순위 규칙도 같습니다.
+
+- `+` (더하기), `-` (빼기), `*` (곱하기)
+- `/` : 나누기의 **몫**을 구함 (예: `10 / 20` ➔ 몫은 `0` )
+- `%` : 나누기의 **나머지**를 구함 (예: `10 % 20` ➔ 나머지는 `10` )
+- **증감 연산자** : 값을 1씩 더하거나 빼는 연산자
+    - **전위 연산 (`++a`)**: 내가 가진 값을 **먼저 1 더한 후**, 다른 연산(대입 등)을 수행합니다.
+    - **후위 연산 (`a++`)**: 현재 값으로 **다른 연산을 먼저 수행한 후**, 마지막에 내 값을 1 더합니다.
+// * 전위 연산자 예시
+int a = 10;
+int b = ++a; // a가 먼저 11이 된 후, b에 11이 대입됨
+System.out.println(a + "," + b); // 출력 결과: 11, 11
+
+// * 후위 연산자 예시
+int x = 10;
+int y = x++; // 현재 x값(10)이 y에 먼저 대입된 후, x가 11로 바뀜
+System.out.println(x + "," + y); // 출력 결과: 11, 10 
+### 4) 논리 연산자 (Logical Operators)와 단축 평가
+
+논리값(`boolean`) 두 개를 비교하여 결과를 도출합니다.
+
+- `&&` (AND) : 둘 다 `true`여야만 `true` 반환
+- `||` (OR) : 둘 중 하나만 `true`여도 `true` 반환
+
+#### 단축 평가 (Short-Circuit Evaluation, SCE)
+
+자바 컴파일러는 효율성을 위해 **앞의 조건만으로 결과가 확실할 때 뒤의 식을 아예 계산(평가)하지 않고 패스**합니다.
+
+- `A && B` : 앞의 조건 `A`가 `false`이면 뒤의 `B`가 무엇이든 무조건 거짓이므로, **`B`를 실행하지 않습니다**.
+- `A || B` : 앞의 조건 `A`가 `true`이면 뒤의 `B`가 무엇이든 무조건 참이므로, **`B`를 실행하지 않습니다**.
+
+<aside>
+⚒️
+
+**단축 평가의 실무 활용 예시 (Null 에러 방지)**
+
+웹 개발 시 데이터가 비어있는 상태(`null`)에서 기능을 호출하면 에러(`NullPointerException`)가 발생합니다. 
+
+단축 평가를 활용하면 안전장치를 만들 수 있습니다.
+
+</aside>
+
+```java
+String str = null;
+
+// str이 null이므로 (str != null)은 false가 됩니다.
+// AND(&&) 연산의 특성상 뒤의 구문(str.length() > 0)은 아예 실행되지 않으므로 에러가 나지 않습니다!
+if (str != null && str.length() > 0) {
+    System.out.println("문자열 길이: " + str.length()); 
+}
+```
+
+### 5) 삼항 연산자 (Ternary Operator)
+
+`조건식 ? 식1 : 식2;` 형태로 작성하며, 조건이 참이면 `식1`, 거짓이면 `식2`를 실행하는 간결한 조건식입니다. 가독성을 위해 삼항 연산자 안에 또 다른 삼항 연산자를 중첩하여 쓰는 것도 가능합니다.
+
+```java
+int a = 10, b = 20;
+
+// a가 b보다 크면 a++를 실행하고, 그렇지 않으면 b--를 실행하여 결과를 저장
+int result = a > b ? a++ : b--;
+// 결과: a(10) > b(20)은 거짓이므로 b--가 실행되어 result에는 20이 담김
+```
+### ↗️비트를 대상으로 연산하는, 비트 연산자
+
+#### 1. 시프트 연산자
+
+비트를 왼쪽 또는 오른쪽으로 지정한 칸 수만큼 이동 시키는 연산자
+
+`<<` : 비트를 왼쪽으로 지정한 칸 수만큼 이동
+
+- 원래 숫자 3: `0000 0011`
+- 왼쪽으로 2칸 이동: `0000 1100`
+    - 앞의 `00` 은 버려지고, 뒤에 `00` 이 채워짐
+- 결과: `0000 1100` (12)
+
+```java
+public class ShiftTest {
+	public static void main(String[] args) {
+			
+			int a = 3;
+			int leftShift = a << 2;
+			
+			System.out.println("a : " + a);
+			System.out.println("a << 2 : " + leftShift);
+			
+	}
+}
+```
+
+`>>` : 비트를 오른쪽으로 지정한 칸 수만큼 이동
+
+- 원래 숫자 12: `0000 1100`
+- 오른쪽으로 2칸 이동: `0000 0011`
+    - 앞의 빈칸은 원래 부호가 `0` 이었으므로 `0` 으로 채움
+- 결과: `0000 0011` (3)
+
+```java
+public class ShiftTest {
+	public static void main(String[] args) {
+			
+			int b = 12;
+			int rightShift = b >> 2;
+			
+			System.out.println("b : " + b);
+			System.out.println("b >> 2 : " + rightShift);
+			
+			int c = -8;
+			int rightShift2 = c >> 2;
+			
+			System.out.println("c : " + c);
+			System.out.println("c >> 2 : " + rightShift2);
+			
+	}
+}
+```
+
+`>>>` : 비트를 오른쪽으로 이동하지만, 왼쪽 빈칸을 무조건 `0` 으로 채움 
+
+- 원래 숫자 -8 : `1111 1000`
+- 오른쪽으로 2칸 이동 : `0011 1110`
+    - 부호를 무시하고 무조건 `00` 으로 채움
+- 결과: `0011 1110` 8비트 기준 62
+    - int의 경우 32비트로 30개의 비트가 모두 변경되어 큰 수로 변경됨!
+
+```java
+public class ShiftTest {
+	public static void main(String[] args) {
+			
+			int d = 12;
+			int unsignedShift = d >>> 2;
+			
+			System.out.println("d : " + d);
+			System.out.println("d >>> 2 : " + unsignedShift);
+			
+			int e = -8;
+			int unsignedShift2 = e >>> 2;
+			
+			System.out.println("e : " + e);
+			System.out.println("e >>> 2 : " + unsignedShift2);
+			
+	}
+}
+```
+
+#### 2. 논리 연산자 (비트 대상)
+
+`&` : AND 연산. 둘다 `1`일 때만 결과가 `1`
+
+```basic
+  0000 1010  (10)
+& 0000 1100  (12)
+-----------------
+  0000 1000  -> 8의 자리에만 둘 다 1이 있으므로 결과는 8
+```
+
+`|` : OR 연산. 둘 중 하나라도 `1` 이면 결과가 `1`
+
+```basic
+  0000 1010  (10)
+| 0000 1100  (12)
+-----------------
+  0000 1110  -> 8, 4, 2의 자리가 모두 켜져서 8 + 4 + 2 = 14
+```
+
+`^` : XOR 연산. 두 비트가 서로 다를 때만 `1` (같으면 `0`)
+
+```basic
+  0000 1010  (10)
+^ 0000 1100  (12)
+-----------------
+  0000 0110  -> 4의 자리와 2의 자리만 서로 다르므로 4 + 2 = 6
+```
+
+```java
+public class BitLogicalTest{
+    public static void main(String[] args) {
+        int a = 10;
+        int b = 12;
+
+        int andResult = a & b;
+        System.out.println("10 & 12 결과: " + andResult);
+
+        int orResult = a | b;
+        System.out.println("10 | 12 결과: " + orResult); 
+
+        int xorResult = a ^ b;
+        System.out.println("10 ^ 12 결과: " + xorResult);
+    }
+}
+```
