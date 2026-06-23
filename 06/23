@@ -168,3 +168,162 @@ Latte
 - 다운 캐스팅 : 실제 생성된 자식 타입으로 강제 형변환하는 것. 잘못된 타입으로 변환 시 ClassCastException 오류가 발생될 수 있음!
    - instanceof 연산자로 타입 안정성 확인 가능
      참조변수 instanceof 확인할 타입(클래스명)
+
+## MVC 패턴이란?
+
+**MVC(Model-View-Controller)** 패턴은 애플리케이션의 역할을 세 가지로 나누어 개발하는 소프트웨어 디자인 패턴입니다. 각 코드가 자신의 역할에만 집중하도록 분리하는 것이 핵심입니다.
+
+- **Model: 애플리케이션의 정보, 데이터 및 비즈니스 로직**을 나타냅니다. 데이터베이스와의 상호작용(DAO/DTO) 및 상태 변경을 처리하며, View나 Controller에 의존하지 않는 독립적인 형태를 가집니다.
+- **View:** **사용자 인터페이스(UI) 요소**를 나타냅니다. Model이 보유한 데이터를 기반으로 사용자에게 시각적인 화면을 출력하며, 자체적으로 데이터를 저장하거나 물리적인 로직을 수행하지 않습니다.
+- **Controller:** **사용자의 입력(Request)을 받아 흐름을 제어**합니다. 사용자의 요청을 분석하여 Model을 통해 데이터를 변경하고, 그 결과를 어떤 View에 보여줄지 결정하는 다리(Bridge) 역할을 합니다.
+
+## 사용하는 이유
+
+과거에는 하나의 파일에 HTML, Java, SQL 코드가 한데 섞여 있었습니다. 이 경우 코드 한 줄만 고쳐도 전체 시스템이 망가지는 대참사가 일어났죠. MVC 패턴을 사용하는 이유는 다음과 같습니다.
+
+- **유지보수성 향상:** 화면 디자인(View)을 바꿀 때 비즈니스 로직(Model)을 건드릴 필요가 없고, 그 반대도 마찬가지입니다.
+- **높은 재사용성:** 동일한 데이터(Model)를 바탕으로 웹 화면(HTML), 모바일 앱 화면, 혹은 PDF 출력 화면 등 다양한 View를 쉽게 만들어낼 수 있습니다.
+- **역할 분담과 협업 용이:** 디자이너/퍼블리셔는 View에 집중하고, 백엔드 개발자는 Model과 Controller에 집중하여 효율적으로 동시 개발이 가능합니다.
+
+<aside>
+💡
+
+역할에 따라 클래스를 분리하여, 각각의 역할에만 집중하자!
+
+- **Model:** 데이터와 비즈니스 로직에만 집중
+- **View:** 오직 화면을 보여주는 것에만 집중
+- **Controller:** 둘 사이의 흐름을 제어하는 것에만 집중
+</aside>
+## Java 코드 예시
+
+학생(Student) 정보를 관리하는 간단한 Java 예제 코드를 통해 구조를 이해해 봅시다.
+
+### [1] Model (데이터와 로직)
+
+```java
+package model;
+
+public class Student {
+    private int id;
+    private String name;
+
+    // 데이터를 담는 생성자
+    public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    // Getter & Setter (데이터 그 자체에만 집중)
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+}
+```
+### [2] Controller (중간 제어)
+
+```java
+package controller;
+
+import model.Student;
+
+public class StudentController {
+    // 임시로 데이터를 저장할 변수
+    private Student model = null; 
+
+    // 데이터 저장 기능 (입력된 데이터를 받아 Model 객체로 저장)
+    public void registerStudent(int id, String name) {
+        this.model = new Student(id, name);
+        System.out.println("=> [System] 학생 등록이 완료되었습니다.");
+    }
+
+    // 데이터 조회 기능 (저장된 Model이 있는지 검증하고 반환)
+    public Student getStudent() {
+        return this.model;
+    }
+}
+```
+[3] View (화면 출력)
+
+package view;
+
+import controller.StudentController;
+import model.Student;
+import java.util.Scanner;
+
+public class StudentView {
+    private StudentController controller;
+    private Scanner scanner;
+    
+    public StudentView() {
+	    this.controller = new StudentController();
+	    this.scanner = new Scanner(System.util.System.in);
+    }
+
+    // 메뉴 화면을 보여주고 입력을 처리하는 화면 중심 로직
+    public void startMenu() {
+        while (true) {
+            System.out.println("\n======= 학생 관리 시스템 =======");
+            System.out.println("1. 학생 등록 | 2. 학생 조회 | 3. 종료");
+            System.out.print("메뉴를 선택하세요: ");
+            int menu = scanner.nextInt();
+            scanner.nextLine(); // 버퍼 비우기
+
+            if (menu == 1) {
+                uiRegister(); // 등록 화면으로 이동
+            } else if (menu == 2) {
+                uiDisplay();  // 조회 화면으로 이동
+            } else if (menu == 3) {
+                System.out.println("프로그램을 종료합니다.");
+                break;
+            } else {
+                System.out.println("잘못된 메뉴 선택입니다.");
+            }
+        }
+    }
+
+    // 등록 화면 출력
+    private void uiRegister() {
+        System.out.println("\n--- [학생 등록 화면] ---");
+        System.out.print("학번 입력: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("이름 입력: ");
+        String name = scanner.nextLine();
+
+        // 사용자가 입력을 마치면 Controller에게 데이터 저장을 지시!
+        controller.registerStudent(id, name);
+    }
+
+    // 조회 화면 출력
+    private void uiDisplay() {
+        System.out.println("\n--- [학생 조회 화면] ---");
+        // Controller를 통해 저장된 Model 데이터를 요청
+        Student student = controller.getStudent();
+
+        if (student == null) {
+            System.out.println("=> [System] 등록된 학생 정보가 없습니다. 먼저 등록해주세요.");
+        } else {
+            System.out.println("=====================");
+            System.out.println("학번: " + student.getId());
+            System.out.println("이름: " + student.getName());
+            System.out.println("=====================");
+        }
+    }
+}
+
+[4] Main (실행 클래스)
+
+import controller.StudentController;
+import view.StudentView;
+
+public class Run {
+    public static void main(String[] args) {
+        // 1. 화면을 담당할 View 생성
+        StudentView view = new StudentView();
+
+        // 2. 메인이 실행되면 오직 View를 통해서만 화면이 시작됨
+        view.startMenu();
+    }
+}
