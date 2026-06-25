@@ -1,0 +1,378 @@
+예외처리
+## 예외(Exception)란 무엇인가?
+
+### 1) 예외의 정의
+
+- **개념:** 프로그램 실행 중 발생하는 예상치 못한 돌발 상황이나 문제입니다.
+- **방치의 결과:** 예외가 발생했을 때 적절히 조치(처리)하지 않으면, 프로그램은 그 즉시 **강제 종료**됩니다.
+
+### 예외 발생 케이스 (처리하지 않은 코드)
+
+```java
+public class ExceptionRun {
+    public static void main(String[] args) {
+        System.out.println("프로그램 시작 ============*"); 
+        int[] arr = {1, 2, 3}; 
+
+        // 3번 인덱스는 존재하지 않으므로 여기서 프로그램이 강제 종료됩니다.
+        System.out.println(arr[3]);
+
+        // 아래 코드는 영원히 실행되지 못합니다.
+        System.out.println("프로그램 종료 ============*"); 
+    }
+}
+```
+
+### 실행 결과
+
+```
+프로그램 시작 ============*
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 3 out of bounds for length 3
+    at ExceptionRun.main(ExceptionRun.java:6)
+```
+
+> **결과:** `ArrayIndexOutOfBoundsException`이 발생하여 마지막 종료 로그를 찍지 못하고 프로그램이 비정상적으로 멈췄습니다.
+>
+### 2) 예외(Exception) vs 에러(Error)
+
+자바 메모리 구조 내부에서 발생하는 문제는 크게 두 가지로 분류되며, 모두 `Throwable` 클래스를 상속 받습니다.
+
+- **에러 (Error):** 소스 코드 레벨에서 **수습이 불가능한 심각한 문제**입니다. (예: 메모리 부족 - OutOfMemoryError, 하드웨어 결함 등)
+- **예외 (Exception):** 개발자의 부주의나 외부 환경(파일 부재, 네트워크 유실)으로 인해 발생하는 문제로, 프로그래머가 코드를 통해 **충분히 제어하고 수습할 수 있습니다**.
+
+---
+
+## 예외 처리 구문 (try-catch)
+
+프로그램이 예외를 만나더라도 튕기지 않고, 우회 도로를 통해 끝까지 안전하게 실행되도록 보호막을 치는 문법입니다.
+
+### 1) 구조와 작동 원리
+
+```java
+try {
+
+    // [1] 정상적으로 실행될 코드 및 예외 발생 가능성이 있는 범위
+    
+} catch (발생할_예외_클래스 변수명) {
+
+    // [2] try 안에서 예외가 발생했을 때만 자바가 제어권을 넘겨 수습하는 영역
+    
+}
+
+// [3] 예외가 잘 수습되었으므로 프로그램은 정상적으로 다음 코드를 이어 나감
+```
+### 2) `try-catch` 안전장치 적용하기
+
+```java
+public class ExceptionHandlingRun{
+    public static void main(String[] args){
+        System.out.println("프로그램 시작 ============*");
+        int[] arr = {1, 2, 3};
+        
+        try {
+            System.out.println(arr[3]); // 예외 발생 지점! (이하 try 내부 코드는 즉시 중단)
+            System.out.println("여기는 실행되지 않습니다.");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // 지정한 예외가 발생하면 이곳으로 들어와 코드를 수습합니다.
+            System.out.println("!!!배열 범위를 벗어남!!!");
+        }
+
+        // 프로그램이 죽지 않고 무사히 생존하여 끝까지 실행됩니다!
+        System.out.println("프로그램 종료 ============*");
+    }
+}
+```
+
+#### 실행 결과
+
+```
+프로그램 시작 ============*
+!!!배열 범위를 벗어남!!!
+프로그램 종료 ============*
+```
+
+### 3) 자원의 자동 반납: try-with-resources
+
+컴퓨터의 외부 자원(파일, 네트워크, 데이터베이스 등)을 사용한 뒤에는 메모리 누수(Memory Leak)를 막기 위해 반드시 `close()`를 호출해 닫아주어야 합니다. 이를 가장 현대적이고 안전하게 해결하는 문법이 바로 `try-with-resources`입니다.
+
+#### 기존 자원 반납 방식(`finally`)의 한계점
+
+
+전통적인 방식에서는 예외가 발생하든 안 하든 무조건 실행되는 `finally` 블록 안에서 일일이 자원을 반납했습니다. 이로 인해 코드가 심각하게 지저분해졌습니다.
+```java
+// 기존의 번거롭고 위험한 자원 해제 방식
+FileInputStream fis = null;
+try {
+    fis = new FileInputStream("test.txt");
+    // 파일 읽기 작업...
+} catch (IOException e) {
+    e.printStackTrace();
+} finally {
+    // null 체크와 close() 내부의 예외 처리 때문에 지저분해지는 코드
+    if (fis != null) {
+        try {
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### try-with-resources 문법이란?
+
+`try` 선언부(괄호 안)에 객체를 생성하면, **`try` 블록이 끝남과 동시에 자원을 자동으로 `close()` 해주는 기능**입니다. 개발자가 실수로 닫지 않는 실수를 원천 차단합니다.
+
+- **사용 조건:** 생성하려는 자원 클래스가 `java.lang.AutoCloseable` 인터페이스를 구현하고 있어야 합니다. (자바 표준 입출력 및 DB 관련 클래스는 이미 대부분 구현되어 있습니다.)
+
+#### 구조와 사용법
+
+```java
+try (/* [1] 자동으로 닫아줄 자원 객체 생성 */) {
+    // [2] 정상 실행 및 예외 발생 가능 구문
+} catch (예외_클래스 변수명) {
+    // [3] 예외 수습 (이 시점에는 이미 자원이 안전하게 close된 상태입니다)
+}
+```
+
+#### 활용 예시
+
+**전통적인 자원 반납 방식 (finally 구현)**
+```java
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class FinallyReleaseRun {
+    public static void main(String[] args) {
+        System.out.println("프로그램 시작 ============*");
+
+        FileInputStream fis = null; // 자원을 담을 변수 외부 선언
+
+        try {
+            fis = new FileInputStream("test.txt"); // [1] 파일 열기
+            int data = fis.read();                // [2] 데이터 읽기
+            System.out.println("읽은 데이터: " + data);
+
+        } catch (IOException e) {
+            System.out.println("!!! 파일 입출력 예외 발생 !!!");
+        } finally {
+            // [3] 자원 수동 반납 (코드의 지옥 발생...)
+            if (fis != null) {
+                try {
+                    fis.close(); // close() 도중 예외가 발생할 수 있어 try-catch가 중첩됨
+                    System.out.println(">>> 자원이 무사히 close 되었습니다.");
+                } catch (IOException e) {
+                    System.out.println("!!! 자원 해제 중 예외 발생 !!!");
+                }
+            }
+        }
+
+        System.out.println("프로그램 종료 ============*");
+    }
+}
+```
+
+**현대적인 자원 반납 방식 (try-with-resources 구현)**
+```java
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class TryWithResourcesRun {
+    public static void main(String[] args) {
+        System.out.println("프로그램 시작 ============*");
+
+        // try 괄호 안에 사용할 자원 객체를 선언합니다.
+        try (FileInputStream fis = new FileInputStream("test.txt")) {
+
+            int data = fis.read();
+            System.out.println("읽은 데이터: " + data);
+
+        } catch (IOException e) {
+            // 예외가 발생하여 catch로 넘어오기 전에 FileInputStream은 이미 안전하게 닫혔습니다.
+            System.out.println("!!! 파일 읽기 중 예외 발생 !!!");
+        }
+
+        System.out.println("프로그램 종료 ============*");
+    }
+}
+```
+
+#### 주요 장점
+
+- **코드의 간결성:** 지저분한 `finally` 블록과 중첩 `try-catch`가 완전히 사라집니다.
+- **안전성 확보:** 자원 반납 누락으로 발생하는 시스템 다운 현상(OOM 등)을 완벽히 방지합니다.
+- **에러 유실 방지:** 기존 방식과 다르게 본문과 `close()`에서 동시에 에러가 날 경우, 핵심 에러가 묻히지 않고 숨겨진 예외(Suppressed Exception)로 기록되어 디버깅이 쉬워집니다.
+
+---
+
+## 예외 클래스의 두 갈래 (Checked vs Unchecked)
+### 1) Unchecked Exception (실행 예외)
+
+- **특징:** `RuntimeException` 클래스의 후손 클래스들입니다. 컴파일러가 예외 처리를 강제하지 않습니다 (`Unchecked`).
+- **발생 원인:** 주로 **프로그래머의 부주의나 논리적 오류**로 인해 발생합니다.
+- **올바른 대처법:** `try-catch`로 감싸기보다는, **코드를 수정(방어 코딩)하여 사전에 차단**하는 것이 좋습니다.
+
+### 단골 Unchecked 예외와 대처 코드 가이드
+
+- **`ArithmeticException`**
+    - **원인**: 어떠한 숫자를 `0`으로 나누려고 할 때 발생합니다.
+    - **대처법**: 나누기 연산을 수행하기 전에 분모가 0인지 if문으로 확인합니다.
+- **`NullPointerException`**
+    - **원인**: 할당되지 않은 `null` 상태의 참조 변수로 객체의 멤버(필드/메소드)에 접근할 때 발생합니다.
+    - **대처법**: 객체를 사용하기 전에 반드시 주소값이 비어있지 않은지(`obj != null`) 체크합니다.
+- **`NegativeArraySizeException`**
+    - **원인**: 배열을 생성할 때 크기를 음수(`5` 등)로 지정한 경우 발생합니다.
+    - **대처법**: 배열의 크기가 항상 0 이상이 되도록 논리를 조절합니다.
+- **`ArrayIndexOutOfBoundsException`**
+    - **원인**: 배열의 정의된 인덱스 범위를 벗어나 참조를 시도할 때 발생합니다.
+    - **대처법**: 반복문이나 조회 시 `배열명.length`를 활용해 한계 범위를 명확히 통제합니다.
+- **`ClassCastException`**
+    - **원인**: 상속 관계에서 부적절하고 무리한 강제 형변환(Downcasting)을 진행할 때 발생합니다.
+    - **대처법**: 형변환 전 반드시 `instanceof` 연산자로 타입을 사전 검증합니다.
+
+### 2) Checked Exception (필수 예외)
+
+- **특징:** `RuntimeException`을 제외한 모든 일반 예외 클래스들입니다.
+- **컴파일러의 개입:** 코드를 빌드(컴파일)하기 전에 예외 처리 구문(`try-catch` 또는 `throws`)이 작성되어 있는지 아주 깐깐하게 검사합니다. **처리가 안 되어 있으면 아예 빨간 줄이 뜨며 컴파일이 거부됩니다.**
+- **대표 클래스:** `IOException` (입출력 예외), `SQLException` (데이터베이스 예외) 등
+## 예외 제어 명령어: throw vs throws
+
+두 명령어는 스펠링이 비슷해 자주 혼동하지만, "예외를 고의로 터뜨리는 것"과 "예외를 상위로 떠넘기는 것"으로 완전히 다른 역할을 수행합니다.
+
+### 1) 예외 발생시키기: `throw`
+
+- **개념:** 메소드 내부에서 개발자가 비즈니스 로직에 맞지 않는 상황이 발생했을 때, **의도적으로 예외 객체를 생성하여 시스템에 던지는** 명령어입니다.
+
+```java
+public class ThrowRun{
+    public static void checkAge(int age){
+        if (age < 0) {
+            // 올바르지 않은 값 조건에서 고의로 예외 인스턴스를 생성해 던집니다.
+            throw new IllegalArgumentException("나이는 음수가 될 수 없습니다."); 
+        }
+    }
+
+    public static void main(String[] args){
+        try {
+            checkAge(-10); // 에러 유발 함수 호출 
+        } catch(IllegalArgumentException e) {
+            System.out.println("예외 발생!!"); 
+            System.out.println(e.getMessage()); // throw할 때 넣은 에러 메시지 출력 
+        }
+    }
+}
+```
+
+### 2) 예외 폭탄 던지기(전달/위임): `throws`
+
+- **개념:** 메소드 선언부에 붙으며, "이 메소드 내부에서 특정 예외가 발생할 위험이 있으니, **이 메소드를 호출해서 사용하는 상위 코드가 책임을 지고 예외 처리(try-catch)를 하라**"고 폭탄을 상위 호출부로 **떠넘기는(전달) 기술**입니다.
+```java
+import java.io.IOException;
+
+public class ThrowsRun{
+    public static void main(String[] args){
+        ThrowsRun test = new ThrowsRun(); 
+
+        try {
+            test.methodA(); // 최종 소비자인 main 메소드가 책임을 지고 전적으로 처리
+        } catch (IOException e) {
+            e.printStackTrace(); // 에러 추적 이력을 상세히 콘솔에 출력
+        }
+    }
+
+    public void methodA() throws IOException{
+        methodB(); // methodB가 던진 예외를 다시 상위로 토스 
+    }
+
+    public void methodB() throws IOException{
+        methodC(); // methodC가 던진 예외를 다시 상위로 토스 
+    }
+
+    public void methodC() throws IOException{
+        // 최초 예외 발생 지점: 폭탄을 생성함과 동시에 메소드 밖으로 던짐!
+        throw new IOException(); 
+    }
+}
+```
+
+---
+
+## 사용자 정의 예외 클래스 (Custom Exception)
+
+자바가 기본으로 제공하는 예외 클래스(`NullPointerException`, `IllegalArgumentException` 등) 외에도, 우리가 만드는 프로그램의 **특정한 비즈니스 로직(업무 규칙)에 맞는 예외**를 개발자가 직접 디자인하여 사용할 수 있습니다.
+### 1) 왜 사용할까?
+
+- **직관적인 예외 이름**: `Exception`이나 `RuntimeException` 같은 모호한 이름 대신, `InvalidAgeException`(잘못된 나이 입력), `LackOfBalanceException`(잔액 부족) 처럼 이름만 봐도 어떤 비즈니스 오류가 났는지 즉시 파악할 수 있습니다.
+- **예외 발생 지점의 추적 및 관리 용이**: 프로그램 내부의 규칙 위반 상황을 시스템 에러와 분리하여 깔끔하게 처리할 수 있습니다.
+
+### 2) 사용자 정의 예외 만들기 규칙
+
+1. **부모 예외 클래스 선택하기**
+    - 일반 예외(Checked)로 만들고 싶다면: `Exception` 클래스를 상속 받습니다. (컴파일러가 체크함)
+    - 실행 예외(Unchecked)로 만들고 싶다면: `RuntimeException` 클래스를 상속 받습니다. **(실무에서 대다수 사용)**
+2. **생성자 구현하기**
+    - 기본 생성자와 에러 메시지(`String message`)를 자식에게 전달하는 생성자를 매칭 해줍니다.
+
+### 사용자 예외 클래스 예시
+
+**잔액 부족 예외 클래스**
+
+```java
+// RuntimeException을 상속받아 Unchecked Exception으로 정의합니다.
+public class LackOfBalanceException extends RuntimeException {
+
+    // 기본 생성자
+    public LackOfBalanceException() {
+        super();
+    }
+
+    // 에러 메시지를 받아서 부모(RuntimeException)에게 전달하는 생성자
+    public class LackOfBalanceException(String message) {
+        super(message);
+    }
+}
+```
+
+**적용 예시**
+```java
+public class Account {
+    private int balance = 10000; // 현재 잔액 10,000원
+
+    // 출금 메서드
+    public void withdraw(int amount) {
+        if (this.balance < amount) {
+            // 잔액이 부족하면 내가 만든 커스텀 예외를 고의로 발생(throw)시킵니다.
+            throw new LackOfBalanceException("잔액이 부족합니다. (현재 잔액: " + this.balance + "원 / 요청 금액: " + amount + "원)");
+        }
+        this.balance -= amount;
+        System.out.println("출금 성공! 남은 잔액: " + this.balance + "원");
+    }
+}
+
+public class CustomExceptionRun {
+    public static void main(String[] args) {
+        Account myAccount = new Account();
+
+        try {
+            System.out.println("--- 1차 출금 시도 ---");
+            myAccount.withdraw(5000); // 성공
+            
+            System.out.println("\n--- 2차 출금 시도 ---");
+            myAccount.withdraw(7000); // 실패! 예외 발생 지점
+            
+        } catch (LackOfBalanceException e) {
+            // 내가 만든 예외 클래스 타입으로 정확하게 낚아채서 수습합니다.
+            System.out.println("[시스템 메시지] 비즈니스 로직 에러 감지!");
+            System.out.println("이유: " + e.getMessage());
+        }
+    }
+}
+```
+
+**실행 결과**
+--- 1차 출금 시도 ---
+출금 성공! 남은 잔액: 5000원
+
+--- 2차 출금 시도 ---
+[시스템 메시지] 비즈니스 로직 에러 감지!
+이유: 잔액 부족합니다. (현재 잔액: 5000원 / 요청 금액: 7000원)
