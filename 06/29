@@ -1,0 +1,575 @@
+# 2026-06-29 자바 개요부터 입출력까지
+
+### 빈칸 버전
+* 자바 *
+- 자바 프로그램 실행을 위한 필수 메소드 : 
+- 컴파일된 바이트 코드를 실행하는 가상 기계의 이름 : 
+- 자바에서 메모리 관리를 자동으로 수행하는 기능 : 
+
+
+* 변수 * 
+- 변수에 값을 최초로 대입하는 것 : 
+- 연산을 수행하기 위해서는 연산 대상의 자료형의 종류가 _______ 해야 함
+  따라서 형변환이 발생하는데 자동 형변환과 강제 형변환으로 분류됨
+  자동 형변환 조건 : 
+  강제 형변환 방법 : 
+  
+- 다음 코드의 출력 결과는 ?
+  ------------------------
+  int a = 5;
+  double b = 2.0;
+  double result = a / b;
+  System.out.println(result);
+  ------------------------
+  
+  
+* 연산자 *
+- 두 변수가 같은지 비교하는 연산자 : 
+- 논리 연산자 && 와 || 의 차이점 :
+
+- 다음 코드의 출력 결과는 ?
+  ------------------------
+  int x = 10;
+  int y = 5;
+  x += y;
+  System.out.println(x);
+  ------------------------  
+  
+  
+  * 제어문 *
+  - if~else문을 이용해 숫자가 양수인지 음수인지 0인지 판별하는 코드 작성
+  
+  - for문을 사용하여 1부터 10까지의 합을 계산하는 코드 작성
+  
+  - while문을 사용하여 사용자로부터 음수를 입력받을 때까지 계속 숫자를 입력받는 코드 작성
+  
+  
+  * 배열 *
+  - 배열의 크기를 지정하지 않고 선언 및 초기화하는 방법
+
+  - 2차원 배열을 선언하고 초기화하는 방법
+  
+  - 다음 코드의 출력 결과는 ?  
+    ------------------------
+    int[] arr = {1, 2, 3, 4, 5};
+    System.out.println(arr[2]);
+    ------------------------
+    
+  * 클래스(객체) *
+  - 클래스는 객체를 생성하기 위해 _____와 _______를 정의해 놓은 설계도(틀)
+  - 생성자란 무엇인가? 왜 사용하는가?
+  - 다음 클래스의 객체를 생성하고 name을 출력하는 코드 작성
+  ------------------------
+  class Person {
+    String name;
+    Person (String name) {
+      this.name = name;
+    }
+  }
+  
+  public class Main {
+  
+	  public static void main(String[] args) {
+	    // 이 곳에 작성해주세요.
+
+	  }
+  
+  }
+  ------------------------
+  
+  
+  * 객체 배열 *
+  - 객체 배열이란 ?
+  - 객체 배열을 선언 및 생성(할당) :
+  
+  - 다음 코드를 완성하여 Student 객체 배열을 각 학생의 이름 출력
+  ------------------------
+  class Student {
+    private String name;
+    // 추가해야할 부분을 작성해주세요.
+
+  }
+  
+  public class Main {
+    public static void main(String[] args) {
+      Student[] students = new Student[3];
+      students[0] = new Student("카리나");
+      students[1] = new Student("아이유");
+      students[2] = new Student("이창섭");
+      
+      // 학생 이름을 출력할 수 있도록 코드를 작성해주세요.
+
+    }
+  }
+  ------------------------  
+  
+  
+  * 상속 *
+  - 상속이란 ? 
+  - 상속을 구현하는 방법 : _______ 키워드 사용
+  
+  - 다음 코드에서 Animal 클래스를 상속받은 Dog 클래스 작성
+  ------------------------
+  class Animal {
+    void makeSound() {
+      System.out.println("울음 소리!");
+    }
+  }
+  
+  // 이 곳에 Dog 클래스를 작성해주세요.
+  ------------------------  
+  
+  
+  * 다형성 
+  - 다형성이란 ? 
+  - 인터페이스와 추상 클래스의 차이점
+  ==========================================================================
+      종류               |          인터페이스       |       추상 클래스
+  ==========================================================================
+     다중 상속           |                           |
+     메소드 구현 여부     |                          |
+     인스턴스화 가능 여부 |                          |    
+  ==========================================================================
+  - 다음 인터페이스를 구현하는 클래스 작성
+  ------------------------
+  interface Animal {
+    void eat();
+    void sleep();
+  }
+  
+  // 이 곳에 Animal 인터페이스를 구현하는 클래스를 작성 (Dog 클래스)
+
+  ------------------------
+  
+  
+  * 예외 처리 *
+  - 예외 처리의 필요성 :
+  
+  - try ~ catch 문을 사용하여 0으로 나누는 상황에서 예외 처리 코드 작성
+  ------------------------
+  // 아래 코드에 예외를 추가하세요
+  public class Main {
+     public static void main(String[] args) {
+        int n1 = getRandNum();
+        int n2 = getRandNum();
+        
+        System.out.printf("%d %% %d = %d\n", n1, n2, (n1 / n2));
+     }
+     
+     public static int getRandNum() {
+       return (int)(Math.random() * 10);
+     }
+  }
+  ------------------------  
+  - 사용자 정의 예외를 추가하여 특정 조건에서 예외를 발생시키는 코드 작성
+  ------------------------
+  public class Main {
+    public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+      
+      System.out.print("ID : ");
+      String id = sc.next();
+      
+      System.out.print("PW : ");
+      String pwd = sc.next();
+      
+      if (checkId(id) && checkPwd(pwd)) {
+		     System.out.println("로그인 성공!");
+      }
+    }
+    
+    public static boolean checkId(String id) {
+      if (id.length() >= 6 && id.length() <= 15) {
+        return true;
+      }
+      
+      // 위 조건에 해당되지 않는 경우 잘못된 로그인 정보에 대한 예외 발생!
+    }
+    
+    public static boolean checkPwd(String pwd) {
+      if (pwd.length() >= 8 && pwd.length() <= 20) {
+        return true;
+      }
+      
+      // 위 조건에 해당되지 않는 경우 잘못된 로그인 정보에 대한 예외 발생!
+    }
+  }
+  ------------------------
+
+* 입출력(IO) *
+- 자바에서 IO는 _______ 을 통해 이루어진다.
+  * 종류
+    >> 스트림 사이즈에 따른 분류
+    [1] __________ : 바이트 단위로 데이터를 읽고 씀
+        + 최상위 클래스로 _______ 클래스와 ________ 클래스가 있음
+        + 이진 데이터, 네트워크 통신 시 주로 사용
+        
+    [2] __________ : 문자 단위로 데이터를 읽고 씀
+        + 최상위 클래스로 _______ 클래스와 _______ 클래스가 있음
+        + 텍스트 데이터, 인코딩 변환 시 주로 사용
+
+    >> 외부 매체와의 직접 연결 유무에 따른 분류
+    [1] ___________ : 외부 매체와 직접 연결되는 스트림. 필수 사용!!
+    [2] ___________ : 직접 연결되는 _______을 보조하는 역할의 스트림
+	단독 사용 불가!! _______ 와 함께 사용해야 함!!
+	- 성능 향상, 데이터 형식 변환 등의 기능을 추가함.
+
+- IO 작업 중 발생할 수 있는 예외 : __________ // IO관련 최상위 예외 클래스가 뭘까요??
+- 스트림 사용 후 필수 작업 : 사용이 끝난 스트림은 _____ 메소드를 호출하여 자원을 반납해야 함.
+    자바 7+ 도입된 자동으로 처리해 주는 예외처리 방법인 _________ 문법을 권장함.
+
+    * 자바 *
+- 자바 프로그램 실행을 위한 필수 메소드 : main 메소드
+public static void main(string[] args){      }
+
+- 컴파일된 바이트 코드를 실행하는 가상 기계의 이름 : JVM (Java Virtual Machine)
+                         -바이트 코드(.class)를 생성하는 프로그램 : 컴파일러(javac)
+- 자바에서 메모리 관리를 자동으로 수행하는 기능 :  가비지 컬렉션 
+                         -메모리를 정리해주는 프로그램 : 가지비 컬렉터
+
+
+* 변수 * 
+- 변수에 값을 최초로 대입하는 것 : "초기화"
+   - 선언 :  자료형 변수명; // 메모리 공간에 얼마만큼의 공간이 필요한지 지정하는 것
+   - 대입 :  변수명 = 값;
+
+- 연산을 수행하기 위해서는 연산 대상의 자료형의 종류가 "동일" 해야 함
+  따라서 형변환이 발생하는데 자동 형변환과 강제 형변환으로 분류됨
+  
+  자동 형변환 조건 :  값의 표현 범위가 작은 범위에서 큰 범위로 자동 형변환됨
+  강제 형변환 방법 :  (변환할자료형)대상
+  
+- 다음 코드의 출력 결과는 ?  2.5 자동형변환 double
+  ------------------------
+  int a = 5;
+  double b = 2.0;
+  double result = a / b;   // a 변수의 값이 5- ? 5.0 자동 형변환 후 산술 연산
+  System.out.println(result);  // 결과 : 2.5
+  ------------------------
+  
+  
+* 연산자 *
+- 두 변수가 같은지 비교하는 연산자 :  ==
+  다른지 비교하는 연산자 : !=
+- 논리 연산자 && 와 || 의 차이점 :   
+
+- && : 피연산자(연산대상)가 모두 true 인 경우만 결과가 true
+   -> 앞쪽(왼쪽) 연산의 결과가 false인경우  뒤쪽(오른쪽)연산을 수행하지 않음
+
+-  | |  : 피연산자가 둘중 하나만 true인 경우 true 인경우 결과가 true
+   -> 앞쪽 연산의결과가 true 인경우 뒤쪽 연산을 수행하지 않음 
+
+
+- 다음 코드의 출력 결과는 ?    15
+  ------------------------
+  int x = 10;
+  int y = 5;
+  x += y;   //  ->   x=x+y
+  System.out.println(x);
+  ------------------------  
+  
+  
+  * 제어문 *
+  - if~else문을 이용해 숫자가 양수인지 음수인지 0인지 판별하는 코드 작성
+    
+    if(num > 0 ){//양수 출력
+    }else if(num < 0){//음수 출력
+    }else{ //0 출력 }
+   
+   -for문을 사용하여  1부터 10까지의 합을 계산하는 코드 작성
+ 
+int  total=0; //총 합을 저장하기 위한 변수
+ for(int i = 1 ; i<11; i++){
+         //total=total+i;
+           total + =i;
+ }
+
+  - while문을 사용하여 사용자로부터 음수를 입력받을 때까지 계속 숫자를 입력받는 코드 작성
+  
+     int num=0
+    while(true){
+                
+               num = sc.nextInt();
+               if(num<0){ break;}
+
+    }
+  
+  * 배열 *
+ 
+   - 배열 선언 및 생성
+        
+      자료형[] 배열명 = new 자료형[크기];    
+
+  - 배열의 크기를 지정하지 않고 선언 및 초기화하는 방법
+   
+      자료형[] 배열명 = {값,값,값....};
+
+     
+
+  - 2차원 배열을 선언하고 초기화하는 방법
+       
+      자료형[][] 배열명 = {{값,값...},{값,값,....}};      
+
+  - 다음 코드의 출력 결과는 ?   3
+    ------------------------
+    int[] arr = {1, 2, 3, 4, 5};
+    System.out.println(arr[2]);
+    ------------------------
+    
+  * 클래스(객체) *
+  - 클래스는 객체를 생성하기 위해 "변수(필드,멤버변수) " 와  " 메소드 " 를 정의해 놓은 설계도(틀)
+
+  - 생성자란 무엇인가? 왜 사용하는가?
+
+     정의해 놓은 클래스를 기반으로 "객체를 생성하기 위한 특별한 메소드"
+     객체를 생성하기 위해 / 객체가 생성될 때 초기화 작업을 수행
+  - 표현법
+     
+         접근제한자 class 클래스명 { //접근제한자는 2가지 사용 가능 (public ,(default))
+                                                 // 필드
+                                                     접근제한자 예약어 자료형 변수명; // 초기화 가능
+
+                                                 // 생성자
+                                                     
+                                                     접근제한자 생성자명 (매개변수){  // 생성자명은 클래스명과 대소문자까지 일치해야함.
+
+                                                      }
+
+                                                 //  메소드  
+                                                      접근제한자 예약어 반환형 메소드명(매개변수){
+                                                               //
+                                                       }
+
+
+  - 다음 클래스의 객체를 생성하고 name을 출력하는 코드 작성
+  ------------------------
+  class Person {
+    String name;
+    Person (String name) {
+      this.name = name;
+    }
+  }
+  
+  public class Main {
+  
+	  public static void main(String[] args) {
+	    // 이 곳에 작성해주세요.
+                    
+            Person p1= new Person("이우진");
+               
+           // 같은 패키지 경로에 있는 경우
+           System.out.println("p1.name);
+           // 다른패키지 경로에 있는 경우 - > 객체 생성부터 불가 
+           //생성하고자 할 경우 class 의 접근제한자부터 public 으로 변경해야함
+	  }
+  
+  }
+  ------------------------
+  
+  
+  * 객체 배열 *
+
+  - 객체 배열이란 ?  여러개의 객체를 관리하는 구조.
+
+  - 객체 배열을 선언 및 생성(할당) :
+
+      클래스명[] 배열명 = new 클래스명[크기];
+  
+  - 다음 코드를 완성하여 Student 객체 배열을 각 학생의 이름 출력
+  ------------------------
+  class Student {
+    private String name;
+    // 추가해야할 부분을 작성해주세요.
+      Student(String name){
+         this.name = name;
+        }
+       String getName(){
+               }
+  }
+  
+  public class Main {
+    public static void main(String[] args) {
+      Student[] students = new Student[3];
+      students[0] = new Student("카리나");
+      students[1] = new Student("아이유");
+      students[2] = new Student("이창섭");
+      
+      // 학생 이름을 출력할 수 있도록 코드를 작성해주세요.
+       for(int i = 0; i <students.length ;i++){
+              System.out.println(students[i].getName()); }
+                                                                                                    둘 다 가능 함.
+       for(Student s : students){System.out.println(s.getName());
+            }
+    }
+  }
+  ------------------------  
+  
+  
+  * 상속 *
+
+  - 상속이란 ?  부모 클래스의 멤버(필드/메소드)들을 자식 클래스가 그대로 물려받아 사용할 수 있는 것
+
+                  ->private,생성자는 물려받지 못함
+                   
+                  -> 오버라이딩 : 부모 클래스의 메소드를 자식 클래스에서 재정의 하는 것
+                                        반환형 메소드명 매개변수 정보가 모두 동일해야함
+ 
+                  -> 오버로딩 : 같은 클래스 내에서  같은 이름의 메소드를 여러 개 정의하는 것
+                                        메소드명은 동일해야하고, 매개변수 정보가 다 달라야 함.
+
+  - 상속을 구현하는 방법 : "extends" 키워드 사용
+  
+  - 다음 코드에서 Animal 클래스를 상속받은 Dog 클래스 작성
+  ------------------------
+  class Animal {
+    void makeSound() {
+      System.out.println("울음 소리!");
+    }
+  }
+  
+  // 이 곳에 Dog 클래스를 작성해주세요.
+public class Dog extends Animal{
+
+}
+  ------------------------  
+  
+  
+  * 다형성 
+
+  - 다형성이란 ?  하나의 참조변수가 다양한 객체로 표현될 수 있는 특징
+
+  - 인터페이스와 추상 클래스의 차이점
+  ==========================================================================
+      종류               |          인터페이스       |       추상 클래스
+  ==========================================================================
+     다중 상속           |        가능                   |           불가
+     메소드 구현 여부     |         불가                 |        가능
+     인스턴스화 가능 여부 |             불가             |       불가
+  ==========================================================================
+  - 다음 인터페이스를 구현하는 클래스 작성
+  ------------------------
+  interface Animal {
+  (public abstrack 생략)  void eat();
+  (public abstrack 생략) void sleep();
+  }
+  
+  // 이 곳에 Animal 인터페이스를 구현하는 클래스를 작성 (Dog 클래스)
+  class Dog implements Animal{
+   
+   @Ovrride
+   public void eat(){  }
+   
+   @Override
+   public void sleep(){   }
+
+
+   }
+
+  ------------------------
+  
+  
+  * 예외 처리 *
+  - 예외 처리의 필요성 : 프로그램이 비정상 종료되는 것을 방지하게 위해
+    - 예외 처리 방법 : try ~ catch(직접처리),throws(위임, 떠넘기기)
+    
+    - 예외 처리 종류 : Checked Exception(예외 처리 강제 - IO,),UnChecked Exception(실행 중 발생되는 예외)
+                             
+  - try ~ catch 문을 사용하여 0으로 나누는 상황에서 예외 처리 코드 작성
+  ------------------------
+  // 아래 코드에 예외를 추가하세요
+  public class Main {
+     public static void main(String[] args) {
+        
+        int n1 = getRandNum();
+        int n2 = getRandNum();
+ try{
+        System.out.printf("%d %% %d = %d\n", n1, n2, (n1 / n2));
+     }catch(ArithmeticExceptione){
+      e.printStrackTrace();
+         }catch(Exception e){
+          e.printStackTrace();
+  }
+     
+     public static int getRandNum() {
+       return (int)(Math.random() * 10);
+     }
+  }
+  ------------------------  
+  - 사용자 정의 예외를 추가하여 특정 조건에서 예외를 발생시키는 코드 작성
+  ------------------------
+  public class Main {
+    public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+      
+      System.out.print("ID : ");
+      String id = sc.next();
+      
+      System.out.print("PW : ");
+      String pwd = sc.next();
+      try{
+      if (checkId(id) && checkPwd(pwd)) {
+		     System.out.println("로그인 성공!");
+            }
+      }catch(InvalidException e){
+          e.printStackTrace();
+      }
+    }
+    
+    public static boolean checkId(String id) {
+      if (id.length() >= 6 && id.length() <= 15) {
+        return true;
+      }
+      
+      // 위 조건에 해당되지 않는 경우 잘못된 로그인 정보에 대한 예외 발생!
+            throw  new InvalideException("아이디가 조건에 맞지 않습니다");   
+}
+    
+    class InvaildException extends Exception {  
+
+            public InvalidException() { }
+            
+            public InvalidException(String message){
+                      super(message);
+             }
+
+    } 
+
+    public static boolean checkPwd(String pwd) throws InvalidException {
+      if (pwd.length() >= 8 && pwd.length() <= 20) {
+        return true;
+      }else{ }
+      
+      // 위 조건에 해당되지 않는 경우 잘못된 로그인 정보에 대한 예외 발생!
+      throw new InvaildException("비밀번호가 조건에 맞지 않습니다.");
+    }
+  }
+  ------------------------
+
+* 입출력(IO) *
+
+- 자바에서 IO는 "스트림" 을 통해 이루어진다.
+
+  * 종류
+    >> 스트림 사이즈에 따른 분류
+    [1] "바이트 기반 스트림" : 바이트 단위로 데이터를 읽고 씀
+        + 최상위 클래스로 "InputStream" 클래스와 "OutputStream" 클래스가 있음
+        + 이진 데이터, 네트워크 통신 시 주로 사용
+        
+    [2] "문자 기반 스트림": 문자 단위로 데이터를 읽고 씀
+        + 최상위 클래스로 "Reader" 클래스와 "Writer" 클래스가 있음
+        + 텍스트 데이터, 인코딩 변환 시 주로 사용
+
+    >> 외부 매체와의 직접 연결 유무에 따른 분류
+    [1] "기반 스트림" : 외부 매체와 직접 연결되는 스트림. 필수 사용!!
+    [2] "보조 스트림" : 직접 연결되는 "기반 스트림"을 보조하는 역할의 스트림
+	단독 사용 불가!! "기반 스트림"과 함께 사용해야 함!!
+	- 성능 향상, 데이터 형식 변환 등의 기능을 추가함.
+
+- IO 작업 중 발생할 수 있는 예외 : "IOEXception" // IO관련 최상위 예외 클래스가 뭘까요??
+- 스트림 사용 후 필수 작업 : 사용이 끝난 스트림은 "close();" 메소드를 호출하여 자원을 반납해야 함.
+    자바 7+ 도입된 자동으로 처리해 주는 예외처리 방법인 "try with resources"문법을 권장함.
+
+   try(스트림객체_선언_및_생성){
+   //IO작업코드
+}catch(IOException e) { 
+}
