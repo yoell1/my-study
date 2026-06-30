@@ -1,0 +1,173 @@
+### 기본 API - 날짜 관련 클래스
+```java
+// * 날짜 관련 클래스 중 LocalDate, LocalTime, LocalDateTime 에 대해 찾아보자
+// >> 구글 검색 :: jdk 17 docs => 공식 사이트 참고
+//              :: java LocalDate 사용법 => 검색!
+// >> AI 프롬프트 :: java 17 버전 사용 중인데, LocalDate, LocalTime, LocalDateTime 클래스에 대해 기본 사용법을 예시와 함께 정리해줘.
+
+// TODO: 주어진 조건에 맞게 LocalDate 객체를 생성해보자.
+LocalDate date1 = ______;   // 현재 날짜 정보로 객체 생성
+LocalDate date2 = ______;   // 개강일(2026/06/11) 정보로 객체 생성
+LocalDate date3 = ______;   // 종강일(2026/12/16) 정보로 객체 생성
+
+// TODO: 주어진 조건에 맞게 LocalTime 객체를 생성해보자.
+LocalTime time1 = ______;   // 현재 시간 정보로 객체 생성
+LocalTime time2 = ______;   // 수업 시작 시간(09:00) 정보로 객체 생성
+LocalTime time3 = ______;   // 수업 종료 시간(18:00) 정보로 객체 생성
+
+// TODO: 주어진 조건에 맞게 LocalDateTime 객체를 생성해보자.
+LocalDateTime datetime1 = ______;    // 현재 날짜,시간 정보로 객체 생성
+LocalDateTime datetime2 = ______;    // 미니 프로젝트 발표(2026/07/02 14:00) 정보로 객체 생성
+
+// * 추가 문제: 다음 코드의 결과를 예상해보자.
+System.out.println(date2.isBefore(date3));	   // 
+System.out.println(time2.isAfter(time3));  	   // 
+System.out.println(datetime1.isEqual(datetime2));  // 
+```
+---
+
+### 제네릭과 컬렉션
+#### 제네릭
+- 클래스 또는 메소드에서 사용되는 다양한 ________을 일반화 시켜서 정의하는 방법
+
+- 특징
+  * 코드 재사용성이 높아짐
+  * 타입 안정성 제공 ( 의도하지 않은 타입 사용 방지 )
+  * 불필요한 형변환 줄임
+
+#### 컬렉션
+- 자바에서 제공하는 기본 자료구조 프레임워크
+  - 자료구조 : 많은 데이터를 효율적으로 관리할 수 있는 방법들
+  - 프레임워크 : 이미 만들어져 있는 틀 (뼈대)
+
+|  | List | Set |
+| --- | --- | --- |
+| 순서 |  |  |
+| 중복 데이터 허용 |  |  |
+| 데이터 추가 메소드 |  |  |
+| 데이터 삭제 메소드 |  |  |
+| 데이터 조회 메소드 |  |  |
+| 데이터 길이 조회 |  |  |
+
+
+```java
+// 아래 코드를 작성해주세요.
+public class Main {
+	public static void main(String[] args) {
+		lotto();
+	}
+	
+	/** lotto 메소드
+	*   : 1 ~ 45 정수를 중복되지 않게 6개 생성 후 결과를 출력
+	* * Math.random() 또는 Random 사용
+	* * 중복을 허용하지 않는 컬렉션 사용
+	*/
+}
+```
+
+### 기본 API - 날짜 관련 클래스
+```java
+// * 날짜 관련 클래스 중 LocalDate, LocalTime, LocalDateTime 에 대해 찾아보자
+// >> 구글 검색 :: jdk 17 docs => 공식 사이트 참고
+//              :: java LocalDate 사용법 => 검색!
+// >> AI 프롬프트 :: java 17 버전 사용 중인데, LocalDate, LocalTime, LocalDateTime 클래스에 대해 기본 사용법을 예시와 함께 정리해줘.
+
+// TODO: 주어진 조건에 맞게 LocalDate 객체를 생성해보자.
+LocalDate date1 =  "LocalDate.now(); "               //  현재 날짜 정보로 객체 생성
+LocalDate date2 =  "LocalDate.of(2026, 6, 11); "   // 개강일(2026/06/11) 정보로 객체 생성
+LocalDate date3 =  "LocalDate.of(2026,12,16); "   // 종강일(2026/12/16) 정보로 객체 생성
+
+// TODO: 주어진 조건에 맞게 LocalTime 객체를 생성해보자.
+LocalTime time1 = " LocalTime.now(); "        // 현재 시간 정보로 객체 생성
+LocalTime time2 = " LocalTime.of(9, 0, 0); "   // 수업 시작 시간(09:00) 정보로 객체 생성
+LocalTime time3 = " LocalTime.of(18,0,0); "   // 수업 종료 시간(18:00) 정보로 객체 생성
+
+// TODO: 주어진 조건에 맞게 LocalDateTime 객체를 생성해보자.
+LocalDateTime datetime1 = " LocalDateTime.now(); "    // 현재 날짜,시간 정보로 객체 생성
+LocalDateTime datetime2 = " LocalDateTime.of(2026,7,2,14,0,0); "   // 미니 프로젝트 발표(2026/07/02 14:00) 정보로 객체 생성
+
+// * 추가 문제: 다음 코드의 결과를 예상해보자.
+System.out.println(date2.isBefore(date3));	              //   true;
+System.out.println(time2.isAfter(time3));  	             //    false;   
+System.out.println(datetime1.isEqual(datetime2));  //  false;
+```
+---
+
+### 제네릭과 컬렉션
+#### 제네릭
+- 클래스 또는 메소드에서 사용되는 다양한 "데이터타입(자료형)" 을 일반화 시켜서 정의하는 방법
+
+- 특징
+  * 코드 재사용성이 높아짐
+  * 타입 안정성 제공 ( 의도하지 않은 타입 사용 방지 )
+  * 불필요한 형변환 줄임
+
+#### 컬렉션
+- 자바에서 제공하는 기본 자료구조 프레임워크
+  - 자료구조 : 많은 데이터를 효율적으로 관리할 수 있는 방법들
+  - 프레임워크 : 이미 만들어져 있는 틀 (뼈대)
+
+|                               | List                    | Set                            | Map
+| ---                          | ---                     | ---                             |
+| 순서                       |  o                      |    x                             | x
+| 중복 데이터 허용      |  o                      |   x   | Value는 중복허용 / key는 중복허용x
+| 데이터 추가 메소드   | add(E e)               | add(E e)                   |  put(K k,V v)
+| 데이터 삭제 메소드   | remove(int index)  |  remove(Object o)      |    remove(K k)
+                                 remove(Object o)
+| 데이터 조회 메소드 |   get(int index)       |  향상된for문(for-each) | keySet() 사용하여 키 값을 기준으로 반복문
+                                                              또는 iterator               또는 
+                                                                                              entrySet() (Entry)구조로 반복문 사용
+| 데이터 길이 조회    |       size()                |          size()              |           size()
+
+
+```java
+// 아래 코드를 작성해주세요.
+public class Main {
+	public static void main(String[] args) {
+		lotto();
+	}
+	
+	/** lotto 메소드
+	*   : 1 ~ 45 정수를 중복되지 않게 6개 생성 후 결과를 출력
+	* * Math.random() 또는 Random 사용
+	* * 중복을 허용하지 않는 컬렉션 사용
+	*/
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
+
+public class Main {
+    public static void main(String[] args) {
+        lotto();
+    }
+    
+    /** lotto 메소드
+    *   : 1 ~ 45 정수를 중복되지 않게 6개 생성 후 결과를 출력
+    * * Math.random() 또는 Random 사용
+    * * 중복을 허용하지 않는 컬렉션 사용
+    */
+    public static void lotto() {
+        // 1. 중복을 허용하지 않는 Set 컬렉션 생성 (정수형 Integer)
+        Set<Integer> lottoSet = new HashSet<>();
+        
+        // 2. 중복되지 않은 숫자가 6개가 쌓일 때까지 반복 생성
+        while (lottoSet.size() < 6) {
+            // Math.random()을 사용하여 1 ~ 45 사이의 난수 생성
+            // (int)(Math.random() * 45) -> 0 ~ 44이므로 뒤에 + 1을 해줍니다.
+            int num = (int)(Math.random() * 45) + 1;
+            
+            // Set은 중복된 값이 들어오면 알아서 무시(저장 안 함)합니다.
+            lottoSet.add(num);
+        }
+        
+        // 3. (선택사항) 보기 좋게 정렬하기 위해 Set을 List로 변환
+        ArrayList<Integer> lottoList = new ArrayList<>(lottoSet);
+        Collections.sort(lottoList); // 오름차순 정렬
+        
+        // 4. 결과 출력
+        System.out.println("로또 번호: " + lottoList);
+    }
+}
+}
+```
