@@ -1,0 +1,115 @@
+### DQL
+- SELECT 문의 실행 순서
+_____ -> _____ -> _____ -> _____ -> _____ -> _____
+
+- JOIN 
+  - ANSI: SELECT * FROM table1 _____ JOIN table2 _____ table1.id = table2.id
+  - Oracle: SELECT * FROM table1, table2 WHERE table1.id = table2.id_____
+
+- 서브쿼리 (다중 행 연산자)
+  - 서브쿼리 결과가 여러 행일 때 사용하는 대표적인 연산자 3가지: _____, _____, _____
+
+---
+
+### DDL
+- 테이블 구조 변경 (컬럼 추가/수정/삭제)
+  - 추가: ALTER TABLE table_name _____ (column_name VARCHAR2(50));
+  - 수정: ALTER TABLE table_name _____ (column_name VARCHAR2(100));
+  - 삭제: ALTER TABLE table_name _____ COLUMN column_name;
+
+- 제약조건 지정 (기본키 및 체크)
+  - CREATE TABLE test (id NUMBER _____ KEY, score NUMBER _____ (score BETWEEN 0 AND 100));
+
+---
+
+### DML
+- 데이터 삽입 및 수정 기본 문법
+  - 삽입: _____ _____ table_name (col1, col2) VALUES (val1, val2);
+  - 수정: UPDATE table_name _____ col1 = val1 _____ id = 10;
+
+- 데이터 삭제 및 초기화 차이
+  - ROLLBACK이 가능하며 구조는 남기고 데이터만 삭제하는 DML 문장: _____ FROM table_name;
+  - ROLLBACK이 불가능하며 고속으로 디스크 공간까지 해제하는 DDL 문장: _____ TABLE table_name;
+
+---
+
+### DCL / TCL
+- 권한 부여 및 회수 (DCL)
+  - 부여: _____ SELECT ON emp _____ scott;
+  - 회수: _____ SELECT ON emp _____ scott;
+
+- 트랜잭션 및 부분 취소 (TCL)
+  - 작업 최종 반영: _____;
+  - 작업 전체 취소: _____;
+  - 특정 저장점 정의: _____ savepoint_name;
+  - 특정 저장점까지 취소: ROLLBACK _____ savepoint_name;
+
+
+  ### DQL( SELECT , 데이터 질의어)
+- SELECT 문의 실행 순서
+"FROM(JOIN)" -> "WHERE" -> "GROUP BY" -> "HAVING" -> "SELECT" -> "ORDER BY"
+
+ => 서브쿼리가 있을경우  제일 먼저 서브쿼리 실행 후 결과를 가지고 사용됨
+
+- JOIN 
+  - ANSI: SELECT * FROM table1 "LEFT" JOIN table2 "ON" table1.id = table2.id
+
+=>  JOIN ~ USING : 조인조건에서 사용되는 컬럼명이 동일한 경우 사용.
+
+  - Oracle: SELECT * FROM table1, table2 WHERE table1.id = table2.id(+)
+
+- 서브쿼리 (다중 행 연산자)
+  - 서브쿼리 결과가 여러 행일 때 사용하는 대표적인 연산자 3가지:  IN , ANY , ALL  , EXISTS
+   컬럼 IN(값1,값2,값3)
+  -서브쿼리 결과가 하나의 값일 때 (하나의 행, 하나의 열) 연산자:  =   ,   <  ,  >  , >= , <= 
+  -서브쿼리 결과가 여러 열일 때(하나의 행, 여러 열) 비교 컬럼 표기법: 
+                                                                                              튜플 형식으로 제시(컬럼명1,컬럼명2....)
+
+---
+
+### DDL(데이터 정의어)  -> 구조를 생성 / 변경/ 삭제    구조=> 데이터베이스의 객체(테이블 , 사용자 , 뷰 , 시퀀스...)
+
+- 테이블 구조 변경 (컬럼 추가/수정/삭제)
+  - 추가: ALTER TABLE table_name "ADD" (column_name VARCHAR2(50));
+  - 수정: ALTER TABLE table_name "MODIFY" (column_name VARCHAR2(100));
+  - 삭제: ALTER TABLE table_name "DELETE" COLUMN column_name;
+
+- 제약조건 지정 (기본키 및 체크)
+  - CREATE TABLE test (
+                        id NUMBER "PRIMARY" KEY,
+                        score NUMBER "CHECK" (score BETWEEN 0 AND 100);
+
+   테이블  레벨 방식
+  CREATE TABLE test( id NUMBER, score NUMBER
+                                CONSTRAINT PK_TEST PRIBARY KEY(ID)
+                                 CONSTRAINT XXX CHECK(score BETWEEN 0 AND 100)  )
+---
+
+### DML
+- 데이터 삽입 및 수정 기본 문법
+  - 삽입: "INSERT INTO" table_name (col1, col2) VALUES (val1, val2);
+  - 수정: UPDATE table_name "SET" col1 = val1 "WHERE" id = 10;
+             WHERE 생략 시 테이블의 모든 행에 수정(업데이트)
+     삭제 : DELETE FROM table_name  WHERE 조건.
+- 데이터 삭제 및 초기화 차이
+  - ROLLBACK이 가능하며 구조는 남기고 데이터만 삭제하는 DML 문장: "DELETE" FROM table_name;
+  - ROLLBACK이 불가능하며 고속으로 디스크 공간까지 해제하는 DDL 문장: "TRUNCATE" TABLE table_name;
+
+---
+
+### DCL / TCL (DCL 데이터 제어어 - 권한 부여 / 회수    , TCL  : 트랜잭션 제어어 -- COMMIT , ROLLBACK )
+- 권한 부여 및 회수 (DCL)
+  - 부여: "GRANT" SELECT ON emp "TO" scott;
+  - 회수: "REVOKE" SELECT ON emp "FROM" scott;
+   
+   - TEST 계정에 접속권한 부여 :  CONNECT, CREATE SESSION
+       GRANT CONNECT TO TEST;
+       GRANT CREATE SESSION TO TEST;
+   -TEST 계정에 접속권한 회수
+      REVOKR CONNECT FROM TEST;   
+
+- 트랜잭션 및 부분 취소 (TCL)
+  - 작업 최종 반영: "COMMIT";
+  - 작업 전체 취소: "ROLLBACK";
+  - 특정 저장점 정의: "SAVEPOINT" savepoint_name;
+  - 특정 저장점까지 취소: ROLLBACK "TO" savepoint_name;
