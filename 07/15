@@ -1,0 +1,112 @@
+### PL/SQL
+- PL/SQL은 기존 SQL에 자바와 같은 절차적 프로그래밍 언어의 특징을 추가한 것으로 변수 선언, 조건문, ____ 등을 사용할 수 있어 복잡한 로직 구현이 가능
+- 변수를 선언하는 부분은 ____ 영역이며, 반드시 실행부인 BEGIN 이전에 위치해야 함
+- 변수 타입 -
+	- 일반 타입 : 오라클에서 사용되는 데이터 타입을 직접 지정하여 선언 ( 변수명 데이터타입 )
+  - _____ 형식 : 특정 테이블의 컬럼 타입을 그대로 가져와서 변수의 데이터 타입으로 지정하고 싶을 때 사용 ( 변수명 테이블명.컬럼명____ )
+- SELECT 문의 결과를 PL/SQL 변수에 대입할 때는 반드시 SELECT ... ____ 변수명 구문을 사용해야 함. ( 이때 조회되는 결과는 반드시 ____개여야만 에러가 발생하지 않음 )
+- ____ : 실행 도중 발생하는 오류를 처리하는 영역 (자바의 catch 블록과 유사한 역할을 수행)
+
+### TRIGGER
+- 트리거는 사용자가 직접 호출하는 것이 아니라, 테이블에 특정 ____(INSERT, UPDATE, DELETE 등)가 발생할 때 DBMS에 의해 자동으로 실행됨
+- 트리거 실행 시점에 따른 분류 (옵션) : _____, ______
+- 트리거 실행 범위에 따른 분류 : 문장 트리거, _______
+  - _______ 작성 시 FOR EACH ____ 옵션 지정 (필수)
+- 트리거 내에서 데이터 접근 방법 (의사 레코드) : _____, _____
+  - ____: 수정 전의 데이터를 참조
+  - ____:  수정 후의 데이터를 참조
+  
+```sql
+-- 부서 번호를 입력받아 부서명을 출력하는 PL/SQL
+____
+    v_dept_name departments.department_name____; -- 타입 참조
+____
+    SELECT department_name
+      ____ v_dept_name
+      FROM departments
+     WHERE department_id = &dept_id; -- 사용자로부터 입력받음
+
+    DBMS_OUTPUT.PUT_LINE('부서명: ' || v_dept_name);
+____
+    WHEN ____ THEN
+        DBMS_OUTPUT.PUT_LINE('해당 부서가 존재하지 않습니다.');
+END;
+/
+```
+
+```sql
+-- 재고(stock)가 변경될 때 로그를 남기는 트리거
+CREATE OR REPLACE ____ trg_stock_log
+____ UPDATE ON products
+FOR EACH ____
+BEGIN
+    -- 수량이 변경되었을 때, 이전 수량과 이후 수량을 로그 테이블에 기록
+    INSERT INTO stock_log (prod_id, old_qty, new_qty, log_date)
+    VALUES (:____.prod_id, :____.quantity, :____.quantity, SYSDATE);
+END;
+/
+```
+
+
+### PL/SQL
+- PL/SQL은 기존 SQL에 자바와 같은 절차적 프로그래밍 언어의 특징을 추가한 것으로 변수 선언, 조건문, "반복문" 등을 사용할 수 있어 복잡한 로직 구현이 가능
+- 변수를 선언하는 부분은 "DECLARE" 영역이며, 반드시 실행부인 BEGIN 이전에 위치해야 함
+- 변수 타입 -
+  - 일반 타입 : 오라클에서 사용되는 데이터 타입을 직접 지정하여 선언 ( 변수명 데이터타입 )
+   EX) 변수명 NUMBER;
+   EX) 변수명 CHAR(크기);
+         변수명 VARCHAR2(크기);
+   EX  변수명 DATE;
+
+ - "레퍼런스(참조)" 형식 : 특정 테이블의 컬럼 타입을 그대로 가져와서 변수의 데이터 타입으로 지정하고 싶을 때 사용 ( 변수명 테이블명.컬럼명"%TYPE;" )
+
+ - 로우 타입 형식 : 테이블의 한 행(모든 컬럼) 타입을 참조하여 지정하고 싶을 때 (JAVA에서 참조변수 유사)
+    ( 변수명 테이블명%ROWTYPE; )
+     
+- SELECT 문의 결과를 PL/SQL 변수에 대입할 때는 반드시 SELECT ... "INTO" 변수명 구문을 사용해야 함. ( 이때 조회되는 결과는 반드시 " 1 " 개여야만 에러가 발생하지 않음 )
+- "EXCEPTION" : 실행 도중 발생하는 오류를 처리하는 영역 (자바의 catch 블록과 유사한 역할을 수행)
+   EXCEPTION  WHEN     THEN   ..;
+
+### TRIGGER
+
+- 트리거는 사용자가 직접 호출하는 것이 아니라, 테이블에 특정 "DML"(INSERT, UPDATE, DELETE 등)가 발생할 때 DBMS에 의해 자동으로 실행됨
+- 트리거 실행 시점에 따른 분류 (옵션) : "BEFORE", "AFTER"
+- 트리거 실행 범위에 따른 분류 : 문장 트리거, "행 트리거"
+  - "행 트리거" 작성 시 FOR EACH "ROW" 옵션 지정 (필수)
+- 트리거 내에서 데이터 접근 방법 (의사 레코드) : " :OLD ",  " :NEW "
+  - " :OLD" : 수정 전의 데이터를 참조
+  - " :NEW" :  수정 후의 데이터를 참조
+ => EMPLOYEE 테이블에 데이터가 추가되었을 때 직원 이름을 확인 ( :NEW.EMP_NAME )
+ => EMPLOYEE 테이블에서 데이터가 삭제되었을 때 직원 번호를 확인 ( :OLD.EMP_ID )
+         
+```sql
+-- 부서 번호를 입력받아 부서명을 출력하는 PL/SQL
+"DECLARE"
+    v_dept_name departments.department_name"%TYPE"; -- 타입 참조
+"BEGIN"
+    SELECT department_name
+      "INTO" v_dept_name
+      FROM departments
+     WHERE department_id = &dept_id; -- 사용자로부터 입력받음
+
+    DBMS_OUTPUT.PUT_LINE('부서명: ' || v_dept_name);
+"EXCEPTION"
+   -- WHEN "OTHERS" THEN
+      WHEN NO_DATE_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('해당 부서가 존재하지 않습니다.');
+END;
+/
+```
+
+```sql
+-- 재고(stock)가 변경될 때 로그를 남기는 트리거
+CREATE OR REPLACE "TRIGGER" trg_stock_log
+"AFTER" UPDATE ON products
+FOR EACH "ROW"
+BEGIN
+    -- 수량이 변경되었을 때, 이전 수량과 이후 수량을 로그 테이블에 기록
+    INSERT INTO stock_log (prod_id, old_qty, new_qty, log_date)
+    VALUES (:OLD.prod_id, :OLD.quantity, :NEW.quantity, SYSDATE);
+END;
+/
+```
