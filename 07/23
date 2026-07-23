@@ -26,3 +26,61 @@
 - _____ : 세션 단위로 데이터를 저장 (탭이나 브라우저가 닫히면 데이터가 삭제됨)
 
 👉 2026-07-23_JS_복습.html 파일의 TODO 주석을 해결해봅시다!
+
+
+### JavaScript
+- 자바스크립트: ECMA 표준을 따르는 웹 기술 언어
+- 작성 방법
+  [1] 인라인 방식: 태그 내부에 이벤트 핸들러 속성을 직접 정의하여 작성
+     on이벤트명 = `동작할내용`
+    ex) 클릭 이벤트 발생시 동작할 내용 =>  <태그명 onclick=`동작할내용`> 
+
+  [2] 내부 방식: HTML 문서 내의 <script> 에 작성
+      <script>
+         // 동작할 내용
+         // 이벤트가 발생될 대상 지정(DOM API)
+       </script>
+
+  [3] 외부 방식: 별도의 .js 파일로 분리하고 HTML과 연결하는 방식
+        HTML 문서와 js 파일 연결 = > head 태그 내에 작성(권장)
+        <script src=`js파일경로`></script>
+
+        js 파일 => 내부 방식에서 script 태그 내에 작성했던 내용
+                       // 대상 지정, 동작할 내용
+
+#### HTML 태그 접근 (DOM API)
+- 자바스크립트로 HTML 요소를 제어하기 위해 객체에 접근하는 방법
+- 접근 방법 (메소드 종류)
+  - id 속성으로 접근: document.getElementById(아이디명)
+  - class 속성으로 접근: document.getElementsByClassName(클래스명)
+  - 태그명으로 접근: document.getElementsByTagName(태그명)
+  - css 선택자로 접근
+    - document.querySelector(CSS선택자) // 하나만 선택
+        => id 명으로 선택한다면?? #아이디명
+        => class 명으로 선택시 ??  .클래스명
+        => 태그명으로 선택시 ?? 태그명
+
+    - document.querySelectorAll(CSS선택자) // 해당 요소 모두 선택
+    
+#### 이벤트 모델 (Event)
+- 고전 이벤트 모델 : 요소의 이벤트 속성에 핸들러를 연결. 1개만 등록 가능.
+  element.on이벤트명 = 이벤트핸들러(이벤트 발생 시 실행할 내용)-> 함수 
+ex) 클릭 이벤트 핸들러 등록
+    element.onclick = function(event){ // event : 이벤트 객체 (이벤트 발생 시 관련 정보를 담고 있음)
+                              //동작할 내용
+                     }
+
+
+- 표준 이벤트 모델 : addEventListener 메소드를 사용. 여러 개 등록 가능.
+  element.addEventListener(`이벤트명`, 이벤트핸들러);
+ex) 클릭 이벤트 핸들로 등록(추가)
+   elemetn.addEventListener(`click`,function(event){
+                         //동작할 내용
+})
+
+ 
+#### 웹 스토리지
+- lacalStorage : 브라우저 저장 공간에 데이터를 유지 (브라우저를 닫아도 데이터가 유지됨)
+- sessionStorage : 세션 단위로 데이터를 저장 (탭이나 브라우저가 닫히면 데이터가 삭제됨)
+
+👉 2026-07-23_JS_복습.html 파일의 TODO 주석을 해결해봅시다!
