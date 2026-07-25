@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>표준 104키 풀배열 가상 키보드</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- [공통 리셋 및 웹폰트 조건 충족] 외부 구글 웹폰트(Noto Sans KR) 연결 -->
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ==========================================
+       [시맨틱 구조 조건 충족] 최소 구조 중 header 시작
+       ========================================== -->
+  <header>
+    <h1>표준 104키 풀배열 가상 키보드</h1>
+    <p>Shift 쌍자음 구현, Caps 대소문자 변환, 유니코드 연산을 통한 실시간 한글 조합 함수</p>
+  </header>
+  <!-- ==========================================
+       header 영역 끝
+       ========================================== -->
+
+  <!-- ==========================================
+       [시맨틱 구조 조건 충족] 최소 구조 중 main 본문 시작
+       ========================================== -->
+  <main>
+    <!-- 콘텐츠 중심 구성: 가상 키보드로 입력된 텍스트가 실시간으로 담기는 디스플레이 화면 -->
+    <div class="display-container">
+      <input type="text" class="keyboard-input" id="inputDisplay" placeholder="자판을 눌러 입력하세요..." readonly>
+    </div>
+
+    <!-- [flex 영역 분할 조건 충족] 키보드 하우징 전체를 감싸는 메인 프레임 패널 -->
+    <div class="keyboard-wrapper">
+      <!-- ==========================================
+           [HTML 구조 분할] 1단: 좌측 메인 키보드 영역 시작
+           ========================================== -->
+      <div class="main-keyboard">
+        
+        <!-- 최상단 기능 펑션 키 행 (ESC 및 F1~F12 기능 배치) -->
+        <div class="keyboard-row fn-row">
+          <button class="key-btn fn-key" id="clearBtn">ESC</button>
+          <div class="empty-space" style="flex: 0.5;"></div>
+          <button class="key-btn fn-key">F1</button><button class="key-btn fn-key">F2</button><button class="key-btn fn-key">F3</button><button class="key-btn fn-key">F4</button>
+          <div class="empty-space" style="flex: 0.5;"></div>
+          <button class="key-btn fn-key">F5</button><button class="key-btn fn-key">F6</button><button class="key-btn fn-key">F7</button><button class="key-btn fn-key">F8</button>
+          <div class="empty-space" style="flex: 0.5;"></div>
+          <button class="key-btn fn-key">F9</button><button class="key-btn fn-key">F10</button><button class="key-btn fn-key">F11</button><button class="key-btn fn-key">F12</button>
+        </div>
+
+        <!-- 1행: 숫자 및 기초 기호 자판 배열 (Backspace 포함) -->
+        <div class="keyboard-row">
+          <button class="key-btn">`</button>
+          <button class="key-btn">1</button><button class="key-btn">2</button><button class="key-btn">3</button>
+          <button class="key-btn">4</button><button class="key-btn">5</button><button class="key-btn">6</button>
+          <button class="key-btn">7</button><button class="key-btn">8</button><button class="key-btn">9</button>
+          <button class="key-btn">0</button><button class="key-btn">-</button><button class="key-btn">=</button>
+          <button class="key-btn backspace" id="backspaceBtn">←</button>
+        </div>
+        <!-- 2행: QWERTY 문자 자판 행 (data-shift-kor 속성으로 Shift 작동 시 쌍자음/복합모음 완벽 매핑) -->
+        <div class="keyboard-row">
+          <button class="key-btn tab utility">Tab</button>
+          <button class="key-btn alpha-key" data-eng="Q" data-kor="ㅂ" data-shift-kor="ㅃ">q</button>
+          <button class="key-btn alpha-key" data-eng="W" data-kor="ㅈ" data-shift-kor="ㅉ">w</button>
+          <button class="key-btn alpha-key" data-eng="E" data-kor="ㄷ" data-shift-kor="ㄸ">e</button>
+          <button class="key-btn alpha-key" data-eng="R" data-kor="ㄱ" data-shift-kor="ㄲ">r</button>
+          <button class="key-btn alpha-key" data-eng="T" data-kor="ㅅ" data-shift-kor="ㅆ">t</button>
+          <button class="key-btn alpha-key" data-eng="Y" data-kor="ㅛ" data-shift-kor="ㅛ">y</button>
+          <button class="key-btn alpha-key" data-eng="U" data-kor="ㅕ" data-shift-kor="ㅕ">u</button>
+          <button class="key-btn alpha-key" data-eng="I" data-kor="ㅑ" data-shift-kor="ㅑ">i</button>
+          <button class="key-btn alpha-key" data-eng="O" data-kor="ㅐ" data-shift-kor="ㅒ">o</button>
+          <button class="key-btn alpha-key" data-eng="P" data-kor="ㅔ" data-shift-kor="ㅖ">p</button>
+          <button class="key-btn">[</button><button class="key-btn">]</button><button class="key-btn">\</button>
+        </div>
+
+        <!-- 3행: ASDF 문자 자판 행 (소문자 기본 정렬 설정 및 전용 Caps ID 부여 완료) -->
+        <div class="keyboard-row">
+          <button class="key-btn caps" id="capsBtn">Caps</button>
+          <button class="key-btn alpha-key" data-eng="A" data-kor="ㅁ" data-shift-kor="ㅁ">a</button>
+          <button class="key-btn alpha-key" data-eng="S" data-kor="ㄴ" data-shift-kor="ㄴ">s</button>
+          <button class="key-btn alpha-key" data-eng="D" data-kor="ㅇ" data-shift-kor="ㅇ">d</button>
+          <button class="key-btn alpha-key" data-eng="F" data-kor="ㄹ" data-shift-kor="ㄹ">f</button>
+          <button class="key-btn alpha-key" data-eng="G" data-kor="ㅎ" data-shift-kor="ㅎ">g</button>
+          <button class="key-btn alpha-key" data-eng="H" data-kor="ㅗ" data-shift-kor="ㅗ">h</button>
+          <button class="key-btn alpha-key" data-eng="J" data-kor="ㅓ" data-shift-kor="ㅓ">j</button>
+          <button class="key-btn alpha-key" data-eng="K" data-kor="ㅏ" data-shift-kor="ㅏ">k</button>
+          <button class="key-btn alpha-key" data-eng="L" data-kor="ㅣ" data-shift-kor="ㅣ">l</button>
+          <button class="key-btn">;</button><button class="key-btn">'</button>
+          <button class="key-btn enter" id="mainEnterBtn">Enter</button>
+        </div>
+        <!-- 4행: ZXCV 문자 자판 행 (좌우측 쉬프트 버튼에 제어용 고유 ID 완벽 매핑) -->
+        <div class="keyboard-row">
+          <button class="key-btn shift" id="leftShiftBtn">Shift</button>
+          <button class="key-btn alpha-key" data-eng="Z" data-kor="ㅋ" data-shift-kor="ㅋ">z</button>
+          <button class="key-btn alpha-key" data-eng="X" data-kor="ㅌ" data-shift-kor="ㅌ">x</button>
+          <button class="key-btn alpha-key" data-eng="C" data-kor="ㅊ" data-shift-kor="ㅊ">c</button>
+          <button class="key-btn alpha-key" data-eng="V" data-kor="ㅍ" data-shift-kor="ㅍ">v</button>
+          <button class="key-btn alpha-key" data-eng="B" data-kor="ㅠ" data-shift-kor="ㅠ">b</button>
+          <button class="key-btn alpha-key" data-eng="N" data-kor="ㅜ" data-shift-kor="ㅜ">n</button>
+          <button class="key-btn alpha-key" data-eng="M" data-kor="ㅡ" data-shift-kor="ㅡ">m</button>
+          <button class="key-btn">,</button><button class="key-btn">.</button><button class="key-btn">/</button>
+          <button class="key-btn shift" id="rightShiftBtn">Shift</button>
+        </div>
+
+        <!-- 5행: 바닥 시스템 보조 행 (스페이스바 좌측 스케일에 맞추어 한영 전환 배치) -->
+        <div class="keyboard-row">
+          <button class="key-btn utility">Ctrl</button>
+          <button class="key-btn utility">Win</button>
+          <button class="key-btn toggle-lang" id="langBtn">한/영</button>
+          <button class="key-btn space" id="spaceBtn">Space</button>
+          <button class="key-btn utility">Alt</button>
+          <button class="key-btn utility">Win</button>
+          <button class="key-btn utility">Ctrl</button>
+        </div>
+      </div>
+      <!-- main-keyboard 구조 마감 -->
+      <!-- ==========================================
+           [HTML 구조 분할] 2단: 가운데 제어용 9키 및 독자 역T자형 방향키 레이아웃 시작
+           ========================================== -->
+      <div class="center-control-block">
+        <div class="nav-cluster">
+          <div class="keyboard-row">
+            <button class="key-btn system-key utility">PrtSc</button>
+            <button class="key-btn system-key utility">ScrLk</button>
+            <button class="key-btn system-key utility">Pause</button>
+          </div>
+          <div class="keyboard-row" style="margin-top: 13px;"> <!-- 상단 펑션행 정밀 수평 일치를 위한 여백 처리 -->
+            <button class="key-btn system-key utility">Insert</button>
+            <button class="key-btn system-key utility">Home</button>
+            <button class="key-btn system-key utility">PgUp</button>
+          </div>
+          <div class="keyboard-row">
+            <button class="key-btn system-key" id="deleteBtn">Delete</button>
+            <button class="key-btn system-key utility">End</button>
+            <button class="key-btn system-key utility">PgDn</button>
+          </div>
+        </div>
+        <!-- 하단 방향키 제어 블록 -->
+        <div class="arrow-cluster">
+          <div class="keyboard-row">
+            <div class="empty-space"></div>
+            <button class="key-btn utility" id="arrowUp">▲</button>
+            <div class="empty-space"></div>
+          </div>
+          <div class="keyboard-row">
+            <button class="key-btn utility" id="arrowLeft">◀</button>
+            <button class="key-btn utility" id="arrowDown">▼</button>
+            <button class="key-btn utility" id="arrowRight">▶</button>
+          </div>
+        </div>
+      </div>
+      <!-- center-control-block 구조 마감 -->
+
+      <!-- ==========================================
+           [HTML 구조 분할] 3단: 우측 숫자 패드 텐키 영역 시작 (Grid 격자 결합형 고정)
+           ========================================== -->
+      <div class="numeric-keypad">
+        <button class="key-btn num-btn num-special utility">Num</button>
+        <button class="key-btn num-btn num-special">/</button>
+        <button class="key-btn num-btn num-special">*</button>
+        <button class="key-btn num-btn num-special">-</button>
+        <button class="key-btn num-btn">7</button>
+        <button class="key-btn num-btn">8</button>
+        <button class="key-btn num-btn">9</button>
+        <button class="key-btn num-btn num-special tall-plus">+</button> <!-- 세로 2칸 병합 -->
+        <button class="key-btn num-btn">4</button>
+        <button class="key-btn num-btn">5</button>
+        <button class="key-btn num-btn">6</button>
+        <button class="key-btn num-btn">1</button>
+        <button class="key-btn num-btn">2</button>
+        <button class="key-btn num-btn">3</button>
+        <button class="key-btn num-btn tall-enter" id="calcBtn">Enter</button> <!-- 세로 2칸 병합 -->
+        <button class="key-btn num-btn wide-zero">0</button> <!-- 가로 2칸 병합 -->
+        <button class="key-btn num-btn">.</button>
+      </div>
+      <!-- numeric-keypad 구조 마감 -->
+
+    </div>
+    <!-- keyboard-wrapper 마감 -->
+  </main>
+  <!-- [시맨틱 구조 조건 충족] main 본문 영역 마감 -->
+
+  <!-- ==========================================
+       [시맨틱 구조 조건 충족] 최소 구조 중 footer 마감
+       ========================================== -->
+  <footer>
+    <p>&copy; 2026 표준 104키 풀배열 가상 키보드 마스터피스.</p>
+  </footer>
+  <!-- ==========================================
+       [체크 완료] CSS 스타일 시트 및 반응형 레이아웃 디자인 시작
+       ========================================== -->
+  
+   <script>document.addEventListener("DOMContentLoaded", function () {
+  const inputDisplay = document.getElementById('inputDisplay');
+  const keys = document.querySelectorAll('.key-btn');
+
+  let isKorean = false;    // false = 영문 모드, true = 한글 모드
+  let isUpperCase = false; // false = 소문자 모드, true = 대문자 모드
+  let isShiftActive = false; // [신규 보완] Shift 활성화 플래그 제어 변수
+
+  const langBtn = document.getElementById('langBtn');
+  const capsBtn = document.getElementById('capsBtn');
+  const leftShiftBtn = document.getElementById('leftShiftBtn');
+  const rightShiftBtn = document.getElementById('rightShiftBtn');
+  const alphaKeys = document.querySelectorAll('.alpha-key');
+
+  // --- 한글 유니코드 음절 매핑 사전 공식 가이드 테이블 인덱스 정보 세팅 ---
+  const choList = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+  const jungList = ["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"];
+  const jongList = ["", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄴㅈ", "ㄴㅎ", "ㄷ", "ㄹ", "ㄹㄱ", "ㄹㅁ", "ㄹㅂ", "ㄹㅅ", "ㄹㅌ", "ㄹㅍ", "ㄹㅎ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+  // 검색 속도를 높이기 위해 글자별 방 번호를 저장할 빈 지도(객체)들을 먼저 생성합니다.
+  const choMap = {}, jungMap = {}, jongMap = {};
+  // 초성 배열을 처음부터 끝까지 돌며 번호표 지도를 만듭니다
+  choList.forEach((item, idx) => { choMap[item] = idx; });
+  // 중성 배열을 처음부터 끝까지 돌며 번호표 지도를 만듭니다. (모든 글자가 존재하므로 일괄 기록)
+  jungList.forEach((item, idx) => { jungMap[item] = idx; });
+  // 종성 배열을 처음부터 끝까지 돌며 번호표 지도를 만듭니다. (첫 칸의 빈칸을 제외하고 실제 글자가 존재할 때만 기록)
+  jongList.forEach((item, idx) => { if (item) jongMap[item] = idx; });
+
+  // [이중 모음 사전] 연속으로 입력된 두 모음이 합쳐져 하나의 복합 모음이 되는 규칙을 정의합니다.
+  // 예: 'ㅗ'와 'ㅏ' 단추가 연달아 들어오면 컴퓨터가 'ㅘ'로 합쳐서 인식하게 만듭니다.
+  const doubleJung = { "ㅗㅏ": "ㅘ", "ㅗㅐ": "ㅙ", "ㅗㅣ": "ㅚ", "ㅜㅓ": "ㅝ", "ㅜㅔ": "ㅞ", "ㅜㅣ": "ㅟ", "ㅡㅣ": "ㅢ" };
+  // [이중 받침 사전] 연속으로 입력된 두 자음이 합쳐져 하나의 겹받침이 되는 규칙을 정의합니다.
+  // 예: 받침 자리에 'ㄹ'과 'ㄱ' 단추가 연달아 들어오면 컴퓨터가 'ㄺ'으로 합쳐서 인식하게 만듭니다.
+  const doubleJong = { "ㄱㅅ": "ㄳ", "ㄴㅈ": "ㄴㅈ", "ㄴㅎ": "ㄴㅎ", "ㄹㄱ": "ㄺ", "ㄹㅁ": "ㄻ", "ㄹㅂ": "ㄼ", "ㄹㅅ": "ㄽ", "ㄹㅌ": "ㄾ", "ㄹㅍ": "ㄿ", "ㄹㅎ": "ㅀ", "ㅂㅅ": "ㅄ" };
+
+  // 상태 지시자 변수 수식 메모리 할당
+  let confirmedText = ""; // 완전히 조립 완료되어 고정 잠금된 본문 텍스트
+  let curCho = "";        // 현재 가공 타건 진행 중인 자리의 초성 자음 데이터
+  let curJung = "";       // 현재 가공 타건 진행 중인 자리의 중성 모음 데이터
+  let curJong = "";       // 현재 가공 타건 진행 중인 자리의 종성 받침 데이터
+
+    // [한글 완성형 코드 변환기] 각각 따로 입력된 초성, 중성, 종성을 조합하여 하나의 완벽한 한글 글자로 합성하는 핵심 연산 함수입니다.
+  function combineHangul() {
+    // 만약 초성(첫 자음)이 없다면, 결합할 수 없으므로 현재 입력된 중성(모음)만 그대로 리턴합니다. (예: 'ㅏ'만 누른 상태)
+    if (!curCho) return curJung;
+    // 만약 중성(모음)이 없다면, 아직 결합할 수 없으므로 현재 입력된 초성(자음)만 그대로 리턴합니다. (예: 'ㄱ'만 누른 상태)
+    if (!curJung) return curCho;
+
+    // 미리 만들어둔 방 번호 지도(Map)에서 현재 조립 중인 초성, 중성 글자의 배열 순서(인덱스) 번호를 알아냅니다.
+    let choIdx = choMap[curCho];
+    let jungIdx = jungMap[curJung];
+    // 받침(종성)은 없을 수도 있으므로, 받침이 존재할 때만 지도를 검색해 번호를 따오고 없다면 0번(받침 없음)으로 지정합니다.
+    let jongIdx = curJong ? jongMap[curJong] : 0;
+
+    // [대한민국 표준 한글 유니코드 공식 계산법]
+    // 한글 유니코드의 시작점은 '가'(44032)입니다. 여기에 (초성 번호 × 21 * 28) + (중성 번호 × 28) + 종성 번호를 모두 더하면
+    // 우리가 원하는 '강', '한', '글' 같은 완벽한 하나의 글자 유니코드 숫자가 계산되어 나옵니다.
+    let charCode = 44032 + (choIdx * 21 * 28) + (jungIdx * 28) + jongIdx;
+    
+    // 계산해서 나온 컴퓨터용 유니코드 숫자(예: 44032)를 사람이 읽을 수 있는 진짜 문자(예: '가')로 변환하여 최종 리턴합니다.
+    return String.fromCharCode(charCode);
+  }
+
+  // [입력창 화면 새로고침] 사용자가 자판을 누를 때마다 상단 텍스트 창의 글씨를 실시간으로 업데이트해주는 함수입니다.
+  function updateDisplay() {
+    // 이미 이전에 완성이 끝난 고정 텍스트(confirmedText)에다가, 방금 막 위에서 열심히 조합하고 있는 실시간 글자(combineHangul())를
+    // 빈틈없이 이어 붙여서 상단 모니터 인풋창(.value)에 즉시 렌더링 출력합니다.
+  inputDisplay.value = confirmedText + combineHangul();
+  }
+
+  // [자판 표면 글자 실시간 체인저] 한영 전환, CapsLock, Shift를 누를 때마다 키보드 단추 표면의 글씨를 알맞게 바꿔주는 최적화 함수입니다.
+  function updateKeyLabels() {
+    // 화면에 존재하는 모든 알파벳/한글 자판 버튼들을 처음부터 끝까지 돌며 검사합니다.
+    alphaKeys.forEach(k => {
+      if (isKorean) {
+        // [한글 모드일 때]
+        // 현재 Shift 키가 눌려있는 상태(isShiftActive가 true)라면 쌍자음 속성(data-shift-kor)인 'ㅃ, ㅉ, ㄸ'을 단추 표면에 보여주고,
+        // Shift 키가 안 눌려있다면 기본 일반 한글 속성(data-kor)인 'ㅂ, ㅈ, ㄷ'을 단추 표면에 매핑해 보여줍니다.
+        k.textContent = isShiftActive ? k.getAttribute('data-shift-kor') : k.getAttribute('data-kor');
+      } else {
+        // [영문 모드일 때]
+        // HTML에 숨겨둔 기본 영문 기준 글자(data-eng)를 가져옵니다. (예: 'q')
+        const engChar = k.getAttribute('data-eng');
+        // CapsLock 버튼이 켜져 있거나, Shift 버튼이 켜져 있거나, 둘 중 하나라도 참(true)인 상태인지를 판별합니다.
+        const targetUpper = (isUpperCase || isShiftActive);
+        // 조건이 참이면 영문 글자를 대문자(.toUpperCase())로 바꾸어 자판에 보여주고, 거짓이면 정갈한 소문자(.toLowerCase())로 바꾸어 보여줍니다.
+        k.textContent = targetUpper ? engChar.toUpperCase() : engChar.toLowerCase();
+      }
+    });
+
+    // [Shift 키 조작 연동 시각화] Shift 상태 플래그에 맞추어 실제 화면 자판의 Shift 버튼 색상 불빛을 온오프 동기화합니다.
+    if (isShiftActive) {
+      // Shift 기능이 활성화 상태라면 좌우측 Shift 버튼 디자인에 active 클래스를 강제 주입하여 오렌지색 불빛을 켭니다.
+      leftShiftBtn.classList.add('active'); rightShiftBtn.classList.add('active');
+    } else {
+      // Shift 기능이 해제 상태라면 active 클래스를 제거하여 오렌지색 하이라이트 불빛을 끕니다.
+      leftShiftBtn.classList.remove('active'); rightShiftBtn.classList.remove('active');
+    }
+  }
+
+
+   // [조합 글자 본문 확정기] 현재 조립대 위에서 열심히 조합 중이던 글자를 온전한 완성형 단어로 묶어 본문 저장소로 안전하게 넘겨주는 함수입니다.
+  function flushComposition() {
+    // 만약 초성이나 중성 중 하나라도 입력되어 조합 중인 글자가 존재한다면 실행합니다.
+    if (curCho || curJung) {
+      // 실시간 조합기(combineHangul)를 돌려 나온 글자를 영구 확정 본문(confirmedText) 뒤에 누적하여 합칩니다.
+      confirmedText += combineHangul();
+      // 다음 글자를 새롭게 깨끗한 상태에서 조립할 수 있도록 초성, 중성, 종성 메모리 방을 완전히 비워줍니다.
+      curCho = ""; curJung = ""; curJong = "";
+    }
+  }
+  // 초기 프레임 구동 상태 정의: 실행 시작과 동시에 물리 자판 표면을 영문 소문자로 세팅 정렬
+  updateKeyLabels();
+
+  // [전체 자판 클릭 이벤트 리스너 통합 등록] 모든 버튼 요소들에 상시 클릭 감지 센서를 심어주는 반복문입니다.
+  keys.forEach(key => {
+    key.addEventListener('click', () => {
+      // [시스템 보조 키 필터링] Shift를 제외한 Ctrl, Win, Alt 등 글자 입력 기능이 아예 없는 순수 보조 단추는 무시합니다.
+      if (key.id !== 'leftShiftBtn' && key.id !== 'rightShiftBtn' && key.classList.contains('utility') && key.id === '') return;
+
+      const keyText = key.textContent;
+
+      // 1. [한/영] 변환 제어 토글 분기
+      if (key.id === 'langBtn') {
+        flushComposition(); // 전환 순간 대기 글자 본문 영구 누적 확정
+        isKorean = !isKorean;
+        if (isKorean) langBtn.classList.add('active'); // 한글 모드 불빛 켜기
+        else langBtn.classList.remove('active');
+        updateKeyLabels(); updateDisplay(); return;
+      }
+
+      // 2. Caps Lock 활성화 대소문자 반전 스위칭 분기
+      if (key.id === 'capsBtn') {
+        flushComposition();
+        isUpperCase = !isUpperCase;
+        if (isUpperCase) capsBtn.classList.add('active'); // 대문자 상태 불빛 켜기
+        else capsBtn.classList.remove('active');
+        updateKeyLabels(); updateDisplay(); return;
+      }
+
+      // 3. Shift 쌍자음/대문자 상태 실시간 변환 토글 분기
+      if (key.id === 'leftShiftBtn' || key.id === 'rightShiftBtn') {
+        isShiftActive = !isShiftActive; // Shift 상태 반전
+        updateKeyLabels(); // 자판 표면 ㅃ,ㅉ,ㄸ 및 대문자 실시간 스위칭 렌더링
+        return;
+      }
+
+      // 4. 텍스트 완전 소거 초기화 분기 (ESC 및 Delete 키 하드웨어 연동 공통 적용)
+      if (key.id === 'clearBtn' || key.id === 'deleteBtn') {
+        curCho = ""; curJung = ""; curJong = ""; confirmedText = "";
+        isShiftActive = false; updateKeyLabels(); updateDisplay(); return;
+      }
+      
+      // 5. 백스페이스 지우기 자판 조건식 연동 분기 처리 단계
+      if (key.id === 'backspaceBtn') {
+        if (curJong) {
+          if (curJong.length === 2) curJong = curJong.at(0); // 겹받침은 앞쪽 받침 하나만 남김
+          else curJong = "";
+        } else if (curJung) {
+          if (curJung.length === 2) curJung = curJung.at(0); // 이중 모음은 단일 모음으로 축소
+          else curJung = "";
+        } else if (curCho) {
+          curCho = "";
+        } else {
+          confirmedText = confirmedText.slice(0, -1); // 조립 중인게 없으면 본문 맨 우측 글자 한 개 삭제
+        }
+        updateDisplay(); return;
+      }
+      // 6. 엔터 및 스페이스, 시스템 제어 버튼 분기
+      if (key.id === 'calcBtn' || key.id === 'mainEnterBtn') {
+        flushComposition(); updateDisplay();
+        alert('입력 전송 값: ' + (inputDisplay.value || '빈 텍스트')); return; // 전체 텍스트 팝업 안내
+      }
+      if (key.id === 'spaceBtn') {
+        flushComposition(); confirmedText += ' '; updateDisplay(); return; // 띄어쓰기 공백 추가
+      }
+      if (key.classList.contains('fn-key')) {
+        flushComposition(); updateDisplay(); alert(keyText + ' 기능 키 작동 확인!'); return; // F1~F12 경고창
+      }
+      if (key.id.startsWith('arrow')) {
+        flushComposition(); confirmedText += '[' + keyText + ']'; updateDisplay(); return; // 방향키 기호화 입력
+      }
+      if (key.classList.contains('num-btn')) {
+        flushComposition(); confirmedText += keyText; updateDisplay(); return; // 우측 텐키 숫자 다이렉트 기입
+      }
+
+      // 7. 상용 규격 한글/영문 입력 분기 작동 제어 처리
+      if (isKorean) {
+        // 현재 누른 자판 글씨가 모음(Vowel)인지 판별합니다.
+        let isVowel = jungMap[keyText] !== undefined;
+
+        if (!isVowel) {
+          // ---------------------------------------------------------------
+          // 가. 누른 자판이 자음(Consonant)인 경우의 연산 처리
+          // ---------------------------------------------------------------
+          if (!curCho) {
+            // 빈 공간이면 최초 첫 글자 자음(초성)으로 등록합니다.
+            curCho = keyText;
+          } else if (curCho && !curJung) {
+            // 초성만 있는데 또 자음이 들어오면 기존 대기 자음을 내보내고 새 초성으로 교체합니다.
+            flushComposition(); curCho = keyText; 
+          } else if (curCho && curJung && !curJong) {
+            // 자음+모음 상태에서 자음이 들어오면 밑받침(종성) 자리에 우선 안착시킵니다.
+            if (jongMap[keyText] !== undefined) curJong = keyText;
+            else { 
+              // 받침으로 쓸 수 없는 된소리 특수 자음(ㄸ, ㅃ, ㅉ)은 분리하여 새 초성으로 넘깁니다.
+              flushComposition(); curCho = keyText; 
+            }
+          } else if (curCho && curJung && curJong) {
+            // 받침까지 꽉 찬 상태에서 자음이 또 들어온 상황인 경우 복합 겹받침 가능 여부를 검색합니다.
+            let combinedJong = doubleJong[curJong + keyText];
+            if (combinedJong) curJong = combinedJong; // 'ㄴ'+'ㅈ'='ㄵ' 처럼 겹받침 업그레이드 결합을 수행합니다.
+            else { 
+              // 규칙에 없는 돌발 자음 연타는 글자를 끊고 새 초성으로 독립 인계합니다.
+              flushComposition(); curCho = keyText; 
+            }
+          }
+        } else {
+          // ---------------------------------------------------------------
+          // 나. 누른 자판이 모음(Vowel)인 경우의 연산 처리
+          // ---------------------------------------------------------------
+          if (!curCho) {
+            // 초성 자음이 없는 빈 상태에서 모음 연속 기입 시 복합 모음 결합 여부를 사전에서 매핑합니다.
+            if (curJung && doubleJung[curJung + keyText]) curJung = doubleJung[curJung + keyText];
+            else { 
+              flushComposition(); curJung = keyText; 
+            }
+          } else if (curCho && !curJung) {
+            // 초성 자음만 대기 중인 상태에서 모음이 들어오면 완벽한 자+모 결합 음절을 완성합니다. (ㄱ+ㅏ=가)
+            curJung = keyText;
+          } else if (curCho && curJung && !curJong) {
+            // 자음+모음 상태에서 연속 모음 유입 시 이중 복합 모음 결합을 시도합니다. (ㅜ+ㅓ=ㅝ)
+            let combinedJung = doubleJung[curJung + keyText];
+            if (combinedJung) curJung = combinedJung;
+            else { 
+              flushComposition(); curJung = keyText; 
+            }
+          } else if (curCho && curJung && curJong) {
+            // [도깨비불 현상 처리] 초성+중성+종성이 꽉 찼는데 또 모음이 들어오면 받침이 다음 글자 초성으로 탈출합니다.
+            let movedCho = ""; let leftJong = "";
+            
+            // 현재 받침이 해체 가능한 복합 겹받침('ㄺ, ㄵ' 등) 구조인지 사전을 역추적 분석합니다.
+            let findOriginJong = Object.keys(doubleJong).find(key => doubleJong[key] === curJong);
+            if (findOriginJong) {
+              leftJong = findOriginJong.at(0);  // 왼쪽 자음 받침은 기존 앞 글자 자리에 남겨둡니다.
+              movedCho = findOriginJong.at(1);  // 오른쪽 자음 받침은 탈출시켜 다음 초성으로 이사 보냅니다.
+            } else {
+              movedCho = curJong; // 단일 받침은 글자 통째로 인계 탈출 시킵니다.
+            }
+            
+            curJong = leftJong; // 기존 앞 글자의 받침 자리를 최종 보정합니다.
+            flushComposition(); // 조립 완료된 앞 글자를 본문 저장소 공간으로 완전히 밀어내어 방출합니다.
+            
+            // 이탈에 성공한 자음과 새 모음을 베이스로 삼아 새로운 글자 조합을 전개 시작합니다!
+            curCho = movedCho; curJung = keyText;
+          }
+        }
+
+        // 쌍자음이나 복합 모음 입력 처리가 끝난 직후 실제 키보드 속성처럼 Shift 기능을 자동 해제합니다.
+        if (isShiftActive) {
+          isShiftActive = false; updateKeyLabels();
+        }
+        updateDisplay();
+      } else {
+        // [영문 입력 상태 모드 가동 분기]
+        // 영문 모드일 땐 복잡한 연산 없이 버튼 표면에 노출된 대/소문자 형태 그대로 저장소 공간에 다이렉트 푸시합니다.
+        flushComposition();
+        confirmedText += keyText;
+
+        // 영문 대문자 기입 직후 Shift 기능을 자동으로 해제하여 소문자 기본 자판 배열로 상시 복귀시킵니다.
+        if (isShiftActive) {
+          isShiftActive = false; updateKeyLabels();
+        }
+        updateDisplay();
+      }
+    });
+  });
+});
+
+
+</script>
+ </body>
+</html>

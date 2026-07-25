@@ -1,0 +1,167 @@
+
+    /* [체크 완료] 공통 리셋: 마진, 패딩, 박스 규격 산정 기준 일괄 공통 초기화 리셋 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f1f2f6;
+      color: #2f3640;
+    }
+
+    header {
+      background-color: #2f3542;
+      color: #ffffff;
+      text-align: center;
+      padding: 1rem;
+    }
+    
+    /* [체크 완료] flex 영역 분할 1지점: 본문 요소를 화면 최중앙에 수직 정렬 정방향 수용 */
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      max-width: 1280px; /* [체크 완료] 반응형 기초: 대형 모니터 해상도 깨짐 상한 가로폭 제한 */
+      margin: 0 auto;
+    }
+    
+    footer {
+      background-color: #2f3542;
+      color: #ced6e0;
+      text-align: center;
+      padding: 0.8rem;
+      font-size: 0.85rem;
+    }
+
+    .display-container {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    .keyboard-input {
+      width: 100%;
+      height: 50px;
+      padding: 10px 15px;
+      font-size: 1.2rem;
+      border: 2px solid #ced6e0;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    /* [flex 영역 분할 2] 좌측/중앙/우측 삼분할 레이아웃을 가로 강제 단일 정렬 */
+    .keyboard-wrapper {
+      display: flex;
+      flex-direction: row; /* 가로 고정 명령어로 자판 쪼개짐 및 아래 떨어짐 현상을 원천 방지 */
+      width: 100%;
+      gap: 12px;
+      background-color: #747d8c;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      overflow-x: auto; /* 브라우저 가로창을 극단적으로 좁혀도 틀이 깨지지 않고 부드러운 하단 가로 스크롤바 생성 */
+    }
+
+    .main-keyboard {
+      flex: 5.5; 
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .center-control-block {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-left: 2px solid #57606f;
+      border-right: 2px solid #57606f;
+      padding: 0 8px;
+    }
+    .nav-cluster, .arrow-cluster {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .arrow-cluster {
+      margin-top: 15px;
+    }
+    /* 우측 텐키 숫자 패드는 정확한 정비율 격자 조립을 위해 display: grid 원격 고정 치환 */
+    .numeric-keypad {
+      flex: 1.6; 
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* 가로 4축 균등 쪼개기 */
+      grid-auto-rows: 38px; /* 셀당 높이값 38px 규격 고정 */
+      gap: 5px;
+      padding-top: 43px; /* 좌측 최상단 ESC/펑션 열 배치 패딩 수평 조정 마진 */
+    }
+
+    .keyboard-row {
+      display: flex;
+      gap: 4px;
+      width: 100%;
+    }
+    .keyboard-row.fn-row {
+      margin-bottom: 5px;
+    }
+
+    /* [체크 완료] hover 효과: 가상 단추 기본 외형 및 마우스 감지 모션 입체감 부여 */
+    .key-btn {
+      flex: 1;
+      height: 38px; 
+      font-size: 0.7rem; 
+      font-weight: bold;
+      background-color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s ease; /* 효과의 급격한 전환을 제어하여 부드러운 타건 모션 연출 */
+      box-shadow: 0 2px 0 #b2bec3; /* 기계식 키보드 버튼 고유의 돌출 높낮이 시각화 표현 */
+      white-space: nowrap; /* 글씨 폰트 크기가 밀려서 버튼 아래로 튕겨 쪼개지는 자소 개행 전면 억제 */
+    }
+    
+    /* [체크 완료] hover 효과: 마우스를 올리는 순간 색상이 변경되며 위로 도약 돌출하는 입체화 무빙 */
+    .key-btn:hover {
+      background-color: #f1f2f6;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 0 #b2bec3;
+    }
+    
+    /* 자판을 실제로 누른 찰나 내부 하우징 축이 축소 입력되는 압축 심도감 구현 */
+    .key-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 0px 0 #b2bec3;
+    }
+
+    /* [한/영], [Caps], [Shift] 모드 활성화 상태 구별 전용 오렌지색 포인트 라이팅 클래스 */
+    .key-btn.toggle-lang, .key-btn.caps, .key-btn.shift {
+      background-color: #eccc68;
+      color: #2f3542;
+    }
+    .key-btn.toggle-lang.active, .key-btn.caps.active, .key-btn.shift.active {
+      background-color: #ff7f50;
+      color: #fff;
+    }
+
+    /* 표준 키보드 규격 레이아웃 준수를 위한 기능 제어 키 전용 크기 스케일 비중 정의 */
+    .key-btn.backspace { flex: 1.8; background-color: #a4b0be; color: #fff; }
+    .key-btn.tab { flex: 1.3; background-color: #a4b0be; color: #fff; }
+    .key-btn.enter { flex: 1.8; background-color: #57606f; color: #fff; }
+    .key-btn.space { flex: 7; background-color: #ffffff; }
+    .key-btn.utility { background-color: #f1f2f6; font-size: 0.65rem; color: #57606f; }
+    .key-btn.system-key { background-color: #dfe4ea; font-size: 0.6rem; } 
+    .key-btn.fn-key { height: 33px; background-color: #dfe4ea; color: #2f3542; font-size: 0.65rem; }
+
+    /* 숫자 패드 그리드 결합 정밀 수치 할당 */
+    .num-btn { height: 100%; width: 100%; }
+    .num-btn.tall-plus { grid-row: span 2; height: 81px; }
+    .num-btn.tall-enter { grid-row: span 2; height: 81px; background-color: #57606f; color: #fff; }
+    .num-btn.wide-zero { grid-column: span 2; }
+    .num-special { background-color: #dfe4ea; }
+    .empty-space { flex: 1; }
+  
