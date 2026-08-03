@@ -1,1 +1,67 @@
+### JDBC
+- JDBC : 자바 애플리케이션에서 데이터베이스에 접속해 SQL을 실행할 수 있게 해주는 표준 API
+
+- PreparedStatement : SQL 문자열을 그대로 실행하여 SQL Injection 공격에 취약한 Statement와 달리, SQL을 미리 컴파일하고 값은 '?'로 바인딩하여 보안과 성능을 높인 객체
+
+- try-with-resources구문 : JDBC 자원 반납(close) 시 실수를 방지하고 안전하게 리소스를 누수 없이 닫기 위해 사용하는 자바 문법(구문)
+
+- Connection Pool : DB와 매번 연결을 맺고 끊는 비용을 줄이기 위해, 컨테이너에 커넥션을 미리 생성해두고 재사용하는 방식
+ [코드 작성 순서]
+1)  드라이버 로드 : Class.forName("jdbc.oracle.driver.OracleDriver")
+         +자바 프로젝트에서는 생략 가능. 톰캣 서버 내에서는 생략 불가
+2)  Connection 객체 생성 => DB 접속 정보 (URL , USER , PASSWORD)
+     DriverManager.getConnerction(URL , USER , PASSWORD)
+3) PreparedStatement 객체 생성 => Connection 객체
+    conn.prepareStatement(실행할 쿼리문);
+4) 쿼리문 실행 후 결과 받기
+    Statement 객체 생성 시 전달된 쿼리문이 미완성 상태이면  완성 상태로 만들고 실행해야 함.
+     => 미완성 상태: ? 가 있는지 확인!
+     ? 채우기  pstmt.setxxx(물음표순번,채울값);
+    쿼리문 완성 후 실행
+     SELECT 문 실행 ->
+     pstmt.excuteQuery();
+     => ResultSet 객체로 반환(조회된 결과)
+         --> 조회 결과 유무 확인 : rset.next();
+     DML문 실행
+     pstmt.executeUpdate();
+     => int 값으로 반환 (변경사항이 적용된 행의 개수)
+5) 자원 반납 => try with resources 문으로 처리 가능(생략 가능) 
+
+
+### MVC 패턴과 아키텍처
+- DTO: Data Transfer Object (데이터 전송 객체) : 계층 간(Controller ↔ Model ↔ View) 데이터를 주고받기 위해 사용하는 객체로, 주로 테이블의 한 행(row)을 자바 객체 하나로 표현하는 객체
+
+- DAO: Data Access Object (데이터 접근 객체) : 실제 SQL 실행을 전담하는 객체로, Controller가 구체적인 SQL 로직을 몰라도 되도록 관심사를 분리하는 역할을 하는 객체
+
+- WEB-INF : View 파일(JSP 등)이 Controller(Servlet)를 거치지 않고 브라우저 URL을 통해 직접 단독으로 열리는 것을 방지(View 보호)하기 위해 뷰 파일을 위치시키는 디렉터리 (브라우저에서 직접 접근 불가)
+
+- Front Controller : 모든 요청을 개별 서블릿이 나누어 받는 기존 구조의 한계를 극복하기 위해, 단 하나의 서블릿이 모든 요청을 통합적으로 수신하고 처리 객체로 위임하는 디자인 패턴 (예: Spring의 DispatcherServlet)
+
+### Servlet & WAS
+- WAS (Web Application Server) : 정적 자원만 응답하는 웹 서버와 달리, 내부에 서블릿 컨테이너를 가지고 있어 DB 조회나 비즈니스 로직 실행 같은 동적인 처리가 가능한 서버 (예: Tomcat)
+
+- Singleton : 서블릿 객체는 매 요청마다 새로 생성되는 것이 아니라, 최초 1회만 생성되어 모든 클라이언트 요청에서 재사용되는 관리 방식
+
+- service() : 서블릿 생명주기 메서드 중 하나로, 클라이언트 요청이 들어올 때마다 매번 호출되며 HTTP 메서드(GET, POST)에 따라 doGet(), doPost() 등으로 자동 분기해 주는 메서드
+
+- redirect : 서버가 브라우저에게 다른 URL로 다시 요청하라고 지시하여 URL 주소가 변경되고 새로운 요청이 발생(기존 요청 데이터 소멸)하는 페이지 이동 방식
+
+- Session : 클라이언트(브라우저) 측에 저장되는 문자열 데이터인 쿠키와 달리, 데이터 자체를 서버 메모리에 저장하며 보안성이 뛰어나 로그인 상태 유지 등에 사용되는 객체
+
+- Filter : 서블릿이 실행되기 전이나 후 시점에 공통적인 전/후처리 로직(한글 인코딩, 로그인 인증 체크 등)을 가로채서 실행할 수 있는 웹 컴포넌트
+
+서블릿 클래스의 특징
+
+- HttpServlet 으로 상속을 받음
+  --> 톰캣에 내장!
+
+- 요청 방식에 따라 실행되는 메소드가 다름 
+   => GET 방식 : doGet()
+   => POST 방식  : doPost()
+--> HttpServletRequest, HttpServletResponse 매개변수가 있음!
+      request : 요청 정보 (요청 방식, 요청 파라미터,.....)
+      response : 응답 정보 (직접 브라우저 출력, 다른 자원으로 응답,재요청 지시, ....)
+
+--> 예외 처리 (throws...)
+
 
