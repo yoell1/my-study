@@ -1,0 +1,62 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> 
+<%-- 1. JSTL 코어 라이브러리 선언 --%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%> 
+<%-- 보내주신 패키지 임포트 구문을 상단에 정확히 배치했습니다 --%>
+<%@ page import="java.util.List,java.util.ArrayList"%> 
+<%@ page import="com.kh.mvc.model.MemberDTO"%> 
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset="UTF-8"> 
+<title>회원 목록</title> 
+</head> 
+<body> 
+    <h1>회원 목록</h1> 
+    
+    <script> 
+    function deleteMember(id) { 
+        if(confirm(id + "번 회원을 정말 삭제하시겠습니까?")) { 
+            location.href = "${pageContext.request.contextPath}/member/delete?id=" + id; 
+        } 
+    } 
+    function updateMember(id) { 
+        location.href = "${pageContext.request.contextPath}/member/update?id=" + id; 
+    } 
+    </script> 
+    
+    <%-- 안전한 동적 주소 처리 --%>
+    <a href="${pageContext.request.contextPath}/member/insert.html">회원 등록</a> 
+    
+    <table border="1"> 
+        <thead> 
+            <tr> 
+                <th>회원 번호</th> 
+                <th>이름</th> 
+                <th>이메일</th> 
+                <th>나이</th> 
+                <th>수정</th> 
+                <th>삭제</th> 
+            </tr> 
+        </thead> 
+        <tbody> 
+            <%-- 2. 서블릿에서 보낸 memberList를 순회하며 하나씩 m 변수에 담아 출력합니다 --%>
+            <c:forEach var="m" items="${memberList}">
+                <tr> 
+                    <%-- DTO의 실제 필드명(id, name, email, age)을 소문자로 적어줍니다 --%>
+                    <td>${m.id}</td> 
+                    <td>${m.name}</td> 
+                    <td>${m.email}</td> 
+                    <td>${m.age}</td> 
+                    <td> 
+                        <%-- 자바스크립트 함수 인자값으로 회원 번호를 주입합니다 --%>
+                        <button type="button" onclick="updateMember(${m.id})">수정</button> 
+                    </td> 
+                    <td> 
+                        <button type="button" onclick="deleteMember(${m.id})">삭제</button> 
+                    </td> 
+                </tr> 
+            </c:forEach>
+        </tbody> 
+    </table> 
+</body> 
+</html>
