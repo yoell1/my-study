@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> 
-<%-- 1. JSTL 코어 라이브러리 선언 --%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%> 
-<%-- 보내주신 패키지 임포트 구문을 상단에 정확히 배치했습니다 --%>
 <%@ page import="java.util.List,java.util.ArrayList"%> 
 <%@ page import="com.kh.mvc.model.MemberDTO"%> 
 <!DOCTYPE html> 
@@ -39,16 +37,16 @@
             </tr> 
         </thead> 
         <tbody> 
-            <%-- 2. 서블릿에서 보낸 memberList를 순회하며 하나씩 m 변수에 담아 출력합니다 --%>
+           
             <c:forEach var="m" items="${memberList}">
                 <tr> 
-                    <%-- DTO의 실제 필드명(id, name, email, age)을 소문자로 적어줍니다 --%>
+                    
                     <td>${m.id}</td> 
                     <td>${m.name}</td> 
                     <td>${m.email}</td> 
                     <td>${m.age}</td> 
                     <td> 
-                        <%-- 자바스크립트 함수 인자값으로 회원 번호를 주입합니다 --%>
+                       
                         <button type="button" onclick="updateMember(${m.id})">수정</button> 
                     </td> 
                     <td> 
