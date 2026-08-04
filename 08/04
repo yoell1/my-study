@@ -1,0 +1,36 @@
+### JSP 기초 및 문법
+
+- JSP (JavaServer Pages) : HTML 코드 내부에 자바 코드를 삽입할 수 있는 웹 페이지 기술. 실행 전 내부적으로 서블릿(Servlet) 클래스로 변환되어 실행됨.
+
+- 지시어<%@ ... %> : page, include, taglib 등이 있으며, JSP 페이지 전체에 대한 설정 정보(인코딩, 외부 클래스 import 등)를 서블릿 컨테이너에 전달하는 문법. (<%@ ... %>)
+
+- 스크립틀릿 : 자바 코드를 작성하는 영역인 <% %>을 의미하며, 변환된 서블릿의 service() 메서드 내부에 그대로 삽입되어 비즈니스 로직 및 제어 흐름을 처리.
+
+- JSP 표현식 태그(Expression Tag) : 변수의 값이나 연산 결과를 화면에 직접 출력할 때 사용하는 <%= %> 구문으로, 문장 끝에 세미콜론(;)을 붙이지 않아야 함.
+
+
+### JSP 내장 객체 및 EL (Expression Language)
+
+- JSP 내장 객체 : JSP가 서블릿으로 변환될 때 service() 메서드 내부에 미리 생성되어, 별도의 선언이나 객체 생성 과정 없이 즉시 사용할 수 있는 request, response, session 등의 객체.
+
+- EL (Expression Language) : 기존 표현식이나 request.getAttribute() 구문을 보다 간결하게 표현하기 위해 도입된 언어로, ${} 형태의 문법을 사용.
+
+- requestScope : EL 표현식(${name}) 실행 시 값이 존재하는지 자동 검색하는 순서 중 두 번째 영역으로, pageScope에서 찾지 못하면 이 범위에서 데이터를 탐색함.
+page -> request -> session -> application
+
+
+### JSTL (JSP Standard Tag Library)
+- JSTL (JSP Standard Tag Library)  : View(화면)와 로직이 뒤섞이는 문제를 해결하기 위해, 스크립틀릿을 쓰지 않고 태그 형태로 반복문이나 조건문 같은 로직을 표현할 수 있게 해주는 표준 라이브러리.
+  => 2개 (jstl-api,jstl-implement)
+
+- taglib 지시어 : JSTL과 같은 커스텀 태그를 페이지 내에서 사용하기 위해 JSP 최상단에 반드시 선언해야 하는 지시자.
+             <%@ tagli uri="..." %>
+
+- <c:choose> : JSTL Core 태그 중 다중 조건문(if - else if - else 구조)에 대응하며, 하위에 <c:when>과 <c:otherwise>를 포함하여 사용하는 태그.
+   단일 조건문 => <c:if>
+   조건식  test 속성에 EL 문법으로 작석
+      <c:if test="${조건식}">
+      <c:when test="${조건식}">
+
+- <c:forEach> : 스크립틀릿의 for문을 대체하는 JSTL Core 태그로, 순회할 컬렉션을 지정하는 items와 반복마다 단일 요소를 담을 var 속성을 주로 활용.
+
