@@ -1,7 +1,3 @@
-# 2026-08-06 Spring MVC
-
-### 빈칸 버전
-
 ```java
 ### Spring MVC
 - _______ : 사용자의 요청을 받아 처리하는 컨트롤러 클래스에 붙이는 어노테이션.
@@ -53,4 +49,64 @@ public class BookController {
     }
 }
 ```
+``` 기준은 서버기준으로.
+
+### 채운 버전
+
+```java
+### Spring MVC
+- @Controller : 사용자의 요청을 받아 처리하는 컨트롤러 클래스에 붙이는 어노테이션.
+	(=> @Component 포함)
+- @ResponseBody : 메소드의 반환값을 뷰(View)가 아닌 HTTP 응답 본문(Response Body)으로 직접 전송하는 어노테이션.
+- @RestController : 클래스에 붙이면 모든 메소드에 @ResponseBody가 자동 적용되는 어노테이션.
+	=> @Controller + @ResponseBody
+- @Service : 비즈니스 로직(Service)을 담당하는 클래스에 붙이는 어노테이션.
+	(=> @Component 포함)
+- @Repository : 데이터베이스 접근(DAO)을 담당하는 클래스에 붙이는 어노테이션.
+	(=> @Component 포함)
+```
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>도서 조회</title>
+</head>
+<body>
+
+    <h1>도서 조회</h1>
+
+<!--    <form action="/books/list" method="post"> -->
+    <!-- 문제: 요청 주소가 맞지 않음(다름) -->
+    <!-- 문제: 요청 방식이 맞지 않음 -->
+    <form action="/book/list" method="get">
+        <input type="text" name="title">
+        <button>조회</button>
+    </form>
+
+</body>
+</html>
+```
+
+```java
+// @RestController // 문제: 목록 조회 요청의 경우 "bookList" 값이 아니라 페이지 응답해줘야 함
+@Controller
+@RequestMapping("/book")
+public class BookController {
+
+    @GetMapping("/list")
+    //public String list() {  // 문제: 목록 조회 시 요청 파라미터를 처리하지 않음!
+    public String list(@RequestParam(defaultValue="") String title) {
+        return "bookList";  // 기본적으로 포워드 처리되므로 bookList 라는 페이지가 응답
+    }
+
+    // @PostMapping("/detail") // 문제: 보통 조회 요청은 GET 방식을 사용함!
+    @GetMapping("/detail")
+    @ResponseBody
+    public Book detail(@RequestParam int id) {
+        return new Book(id, "스프링 입문");
+    }
+}
 ```
