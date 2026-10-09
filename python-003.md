@@ -1,5 +1,3 @@
-[python-003_1.md](https://github.com/user-attachments/files/33252493/python-003_1.md)
-
 # 인공지능 · 머신러닝 · 딥러닝 / 지도 학습 · 비지도 학습
 
 > 2026-10-09 · 정리 주제: ① 인공지능, 머신러닝, 딥러닝의 관계 및 개념 ② 머신러닝의 지도 학습과 비지도 학습의 차이
@@ -71,13 +69,29 @@ flowchart TB
 | 해석 | 비교적 쉬움 (피처 중요도 등) | 어려움 (블랙박스) |
 | 예시 모델 | 로지스틱 회귀, 결정 트리, 랜덤 포레스트, KNN, SVM | CNN(이미지), RNN·트랜스포머(텍스트) |
 
-#### 수업 예시로 보면
+#### 예시 : 온라인 쇼핑몰 주문 데이터
+
+주문 시각과 금액만 있는 데이터에서, **"주문이 취소될지"** 예측에 도움이 될 만한 특징을 사람이 직접 만든다.
 
 ```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "order_time": pd.to_datetime(["2026-10-03 23:40", "2026-10-06 10:15", "2026-10-11 02:05"]),
+    "price": [35000, 120000, 8000],
+    "quantity": [1, 3, 2],
+})
+
 # 피처 엔지니어링 : 사람이 직접 '쓸 만한 특징'을 만든다 → 전통적인 머신러닝
-df["hour"] = df["rent_time"].dt.hour          # 대여 시간대
-df["weekday"] = df["rent_time"].dt.weekday    # 요일
-df["ma5_ratio"] = df["close"] / df["ma5"]     # 5일 이동평균 대비
+df["hour"] = df["order_time"].dt.hour                      # 주문 시간대 (새벽 주문은 취소가 많을까?)
+df["is_weekend"] = (df["order_time"].dt.weekday >= 5).astype(int)   # 주말 여부 (5=토, 6=일)
+df["unit_price"] = df["price"] / df["quantity"]            # 개당 가격
+
+print(df[["hour", "is_weekend", "unit_price"]])
+#    hour  is_weekend  unit_price
+# 0    23           1     35000.0
+# 1    10           0     40000.0
+# 2     2           1      4000.0
 ```
 
 > 이런 피처를 사람이 고민해서 만드는 과정이 머신러닝의 핵심 작업이다.
@@ -85,7 +99,7 @@ df["ma5_ratio"] = df["close"] / df["ma5"]     # 5일 이동평균 대비
 > 딥러닝은 고양이 사진에서 "귀 모양", "수염" 같은 특징을 사람이 정의하지 않아도 신경망이 스스로 찾아낸다.
 
 > [!TIP]
-> 표 형태 데이터(우리가 다룬 주가, 자전거 대여 데이터)는 딥러닝보다 **랜덤 포레스트, 그래디언트 부스팅 같은 전통적 머신러닝이 더 잘 맞는 경우가 많다.**
+> 표 형태 데이터(매출, 주문 기록, 고객 정보처럼 CSV·DB에 담긴 데이터)는 딥러닝보다 **랜덤 포레스트, 그래디언트 부스팅 같은 전통적 머신러닝이 더 잘 맞는 경우가 많다.**
 >
 > 딥러닝이 무조건 더 좋은 것은 아니다.
 
@@ -108,20 +122,30 @@ df["ma5_ratio"] = df["close"] / df["ma5"]     # 5일 이동평균 대비
 
 | 종류 | 정답 형태 | 예시 | 대표 모델 |
 | --- | --- | --- | --- |
-| **분류 (Classification)** | 정해진 **범주** 중 하나 | 스팸/정상, 상승/하락, 연체/정상 | 로지스틱 회귀, 결정 트리, 랜덤 포레스트, KNN, SVM |
-| **회귀 (Regression)** | 연속된 **숫자** | 내일 주가, 집값, 대여 시간(분) | 선형 회귀, 랜덤 포레스트 회귀 |
+| **분류 (Classification)** | 정해진 **범주** 중 하나 | 스팸/정상, 합격/불합격, 대출 연체/정상 | 로지스틱 회귀, 결정 트리, 랜덤 포레스트, KNN, SVM |
+| **회귀 (Regression)** | 연속된 **숫자** | 집값, 내일 기온, 시험 점수 | 선형 회귀, 랜덤 포레스트 회귀 |
 
-#### 수업 예시 : 자전거 장기 연체 예측 (분류)
+#### 예시 : 공부 시간과 출석률로 합격 여부 예측 (분류)
 
 ```python
-from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier
 
-X_train = train[FEATURES]                 # 입력 : 시간대, 요일, 가입 기간, 멤버십 ...
-y_train = train["is_overdue_100m"]        # 정답 : 0 = 정상, 1 = 연체 (레이블)
+# 학습 데이터 : 입력(X)과 정답(y)이 모두 있다
+train = pd.DataFrame({
+    "study_hours": [1, 2, 3, 5, 6, 8, 9, 10],
+    "attendance":  [50, 60, 55, 80, 85, 90, 95, 92],     # 출석률(%)
+    "passed":      [0, 0, 0, 1, 1, 1, 1, 1],             # 정답 : 0 = 불합격, 1 = 합격 (레이블)
+})
 
-model = RandomForestClassifier(random_state=42)
-model.fit(X_train, y_train)               # 입력과 정답을 같이 준다 → 지도 학습
-pred = model.predict(X_test)              # 새 데이터의 정답(연체 여부)을 예측
+X = train[["study_hours", "attendance"]]
+y = train["passed"]
+
+model = DecisionTreeClassifier(random_state=42)
+model.fit(X, y)                  # 입력과 정답을 같이 준다 → 지도 학습
+
+new = pd.DataFrame({"study_hours": [2, 7], "attendance": [58, 88]})
+print(model.predict(new))        # [0 1] → 새 학생 2명의 합격 여부를 예측
 ```
 
 #### 지도 학습의 평가
@@ -133,7 +157,8 @@ pred = model.predict(X_test)              # 새 데이터의 정답(연체 여�
 | 정확도, 정밀도, 재현율, F1, AUC, 혼동행렬 | MAE, MSE, RMSE, R² |
 
 > [!WARNING]
-> 불균형 데이터(예: 연체 18%)에서는 **전부 정상이라고만 답해도 정확도가 82%** 나온다.
+> 불균형 데이터(예: 거래 1,000건 중 사기 거래 20건, 2%)에서는 **전부 정상이라고만 답해도 정확도가 98%** 나온다.
+>
 > 분류는 정확도만 보지 말고 재현율, F1, AUC를 함께 봐야 한다.
 
 ## 2-2. 비지도 학습 (Unsupervised Learning)
@@ -151,18 +176,30 @@ pred = model.predict(X_test)              # 새 데이터의 정답(연체 여�
 | **차원 축소** | 많은 피처를 **핵심 몇 개로 압축** | 피처 100개 → 2개로 줄여 그래프로 보기 | PCA |
 | **이상 탐지** | 대부분과 **다른 데이터**를 찾음 | 카드 부정 사용, 장비 고장 징후 | Isolation Forest |
 
-#### 예시 : 이용자 군집화
+#### 예시 : 쇼핑몰 고객 군집화
 
 ```python
+import pandas as pd
 from sklearn.cluster import KMeans
 
-X = user_df[["대여_횟수", "평균_대여_시간", "평균_이동_거리"]]   # 정답(y) 없음
+# 정답(y) 없이 고객 정보(X)만 있다
+customers = pd.DataFrame({
+    "visits_per_month": [2, 3, 1, 15, 18, 20, 8, 9, 7],
+    "avg_spend":        [10000, 12000, 8000, 30000, 28000, 35000, 150000, 140000, 160000],
+})
 
-kmeans = KMeans(n_clusters=3, random_state=42)
-user_df["group"] = kmeans.fit_predict(X)   # 입력만 주고 3개 그룹으로 나눠 달라고 함
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+customers["group"] = kmeans.fit_predict(customers)   # 입력만 주고 3개 그룹으로 나눠 달라고 함
+
+print(customers.groupby("group").mean().round(0))
+#        visits_per_month  avg_spend
+# group
+# 0                  18.0    31000.0
+# 1                   8.0   150000.0
+# 2                   2.0    10000.0
 ```
 
-> 결과로 나온 그룹 0, 1, 2가 각각 "출퇴근형", "주말 여가형", "가끔 이용형"인지는 **사람이 그룹 특징을 보고 해석**해야 한다. 모델은 이름을 붙여 주지 않는다.
+> 결과로 나온 그룹 0, 1, 2가 각각 "자주 오는 고객", "한 번에 많이 사는 고객", "가끔 오는 고객"인지는 **사람이 그룹별 평균을 보고 해석**해야 한다. 모델은 이름을 붙여 주지 않는다.
 
 ## 2-3. 한눈에 비교
 
@@ -174,7 +211,7 @@ user_df["group"] = kmeans.fit_predict(X)   # 입력만 주고 3개 그룹으로 
 | 대표 작업 | 분류, 회귀 | 군집화, 차원 축소, 이상 탐지 |
 | 평가 | 정답과 비교해 채점 가능 | 정답이 없어 평가가 어려움 (해석 필요) |
 | 데이터 준비 | 정답을 붙이는 데 **비용·시간이 큼** | 정답이 필요 없어 데이터 구하기 쉬움 |
-| 예시 | 주가 상승/하락 분류, 자전거 장기 연체 예측 | 이용자·고객 세분화 |
+| 예시 | 스팸 메일 분류, 집값 예측 | 고객 세분화, 이상 거래 탐지 |
 
 ## 2-4. 그 밖의 학습 방식 (참고)
 
